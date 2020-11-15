@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://mrnabati.github.io/project/06_centerfusion/</loc>
+    <lastmod>2020-11-15T11:01:13-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://mrnabati.github.io/</loc>
+    <lastmod>2020-11-15T11:01:13-05:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://mrnabati.github.io/publication-type/1/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
   </url>
@@ -44,11 +54,6 @@
   
   <url>
     <loc>https://mrnabati.github.io/author/ramin-nabati/</loc>
-    <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://mrnabati.github.io/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
   </url>
   

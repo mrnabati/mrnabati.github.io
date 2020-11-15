@@ -13,6 +13,333 @@
     </image>
     
     <item>
+      <title>CenterFusion</title>
+      <link>https://mrnabati.github.io/project/06_centerfusion/</link>
+      <pubDate>Sun, 15 Nov 2020 11:01:13 -0500</pubDate>
+      <guid>https://mrnabati.github.io/project/06_centerfusion/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;The perception system in autonomous vehicles is responsible for detecting and
+tracking the surrounding objects. This is usually done by taking advantage of
+several sensing modalities to increase robustness and accuracy, which makes sensor
+fusion a crucial part of the perception system. In this paper, we focus on the
+problem of radar and camera sensor fusion and propose a middle-fusion approach
+to exploit both radar and camera data for 3D object detection. Our approach,
+called CenterFusion, first uses a center point detection network to detect objects
+by identifying their center points on the image. It then solves the key data
+association problem using a novel frustum-based method to associate the radar
+detections to their corresponding object’s center point. The associated radar
+detections are used to generate radar-based feature maps to complement the image
+features, and regress to object properties such as depth, rotation and velocity.&lt;/p&gt;
+&lt;h2 id=&#34;our-approach&#34;&gt;Our Approach&lt;/h2&gt;
+&lt;p&gt;We propose CenterFusion, a middle-fusion approach to exploit radar and camera
+data for 3D object detection. CenterFusion focuses on associating radar
+detections to preliminary detection results obtained from the image, then generates
+radar feature maps and uses it in addition to image features to accurately estimate
+3D bounding boxes for objects. Particularly, we generate preliminary 3D detections
+using a key point detection network, and propose a novel frustum-based radar
+association method to accurately associate radar detections to their corresponding
+objects in the 3D space. These radar detections are then mapped to the
+image plane and used to create feature maps to complement
+the image-based features. Finally, the fused features are
+used to accurately estimate objects’ 3D properties such as
+depth, rotation and velocity. The network architecture for
+CenterFusion is shown in the figure below.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-centerfusion-network-architecture&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/architecture.jpg&#34; data-caption=&#34;CenterFusion network architecture&#34;&gt;
+
+
+  &lt;img src=&#34;./images/architecture.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    CenterFusion network architecture
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;center-point-detection&#34;&gt;Center Point Detection&lt;/h3&gt;
+&lt;p&gt;We adopt the &lt;a href=&#34;https://arxiv.org/abs/1904.07850&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CenterNet&lt;/a&gt; detection network for generating preliminary detections on the image. The image features are first extracted using a fully convolutional encoder-decoder backbone network. We follow &lt;a href=&#34;https://arxiv.org/abs/1904.07850&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CenterNet&lt;/a&gt;
+and use a modified version of the &lt;a href=&#34;https://arxiv.org/abs/1707.06484&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Deep Layer Aggregation&lt;/a&gt;
+(DLA) network as the backbone. The extracted image
+features are then used to predict object center points on the
+image, as well as the object 2D size (width and height), center offset, 3D dimensions, depth and rotation. These values
+are predicted by the primary regression heads as shown in
+the network architecture figure. Each primary regression head consists of a 3×3
+convolution layer with 256 channels and a 1×1 convolutional layer to generate the desired output. This provides
+an accurate 2D bounding box as well as a preliminary 3D
+bounding box for every detected object in the scene.&lt;/p&gt;
+&lt;h3 id=&#34;radar-association&#34;&gt;Radar Association&lt;/h3&gt;
+&lt;p&gt;The center point detection network only uses the image
+features at the center of each object to regress to all other
+object properties. To fully exploit radar data in this process, we first need to associate the radar detections to their
+corresponding object on the image plane. To accomplish
+this, a naive approach would be mapping each radar detection point to the image plane and associating it to an object
+if the point is mapped inside the 2D bounding box of that
+object. This is not a very robust solution, as there is not a
+one-to-one mapping between radar detections and objects
+in the image; Many objects in the scene generate multiple
+radar detections, and there are also radar detections that do
+not correspond to any object. Additionally, because the z
+dimension of the radar detection is not accurate (or does
+not exist at all), the mapped radar detection might end up
+outside the 2D bounding box of its corresponding object.
+Finally, radar detections obtained from occluded objects
+would map to the same general area in the image, which
+makes differentiating them in the 2D image plane difficult,
+if possible at all.&lt;/p&gt;
+&lt;p&gt;We develop a frustum association method that uses the object’s 2D bounding
+box as well as its estimated depth and size to create a 3D
+Region of Interest (RoI) frustum for the object. Having an
+accurate 2D bounding box for an object, we create a frustum for that object as shown in the figure below. This significantly
+narrows down the radar detections that need to be checked
+for association, as any point outside this frustum can be ignored. We then use the
+estimated object depth, dimension
+and rotation to create a RoI around the object, to further
+filter out radar detections that are not associated with this
+object. If there are multiple radar detections inside this RoI,
+we take the closest point as the radar detection corresponding to this object.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-frustum-association-an-object-detected-using-the-image-features-left-generating-the-roi-frustum-based-on-objects-3d-bounding-box-middle-and-the-bev-of-the-roi-frustum-showing-radar-detections-inside-the-frustum-right-delta-is-used-to-increase-the-frustum-size-in-the-testing-phase-hatd-is-the-ground-truth-depth-in-the-training-phase-and-the-estimated-object-depth-in-the-testing-phase&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/frustum.jpg&#34; data-caption=&#34;Frustum association. An object detected using the image features (left), generating the ROI frustum based on object&amp;amp;rsquo;s 3D bounding box (middle), and the BEV of the ROI frustum showing radar detections inside the frustum (right). $\delta$ is used to increase the frustum size in the testing phase. $\hat{d}$ is the ground truth depth in the training phase and the estimated object depth in the testing phase.&#34;&gt;
+
+
+  &lt;img src=&#34;./images/frustum.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Frustum association. An object detected using the image features (left), generating the ROI frustum based on object&amp;rsquo;s 3D bounding box (middle), and the BEV of the ROI frustum showing radar detections inside the frustum (right). $\delta$ is used to increase the frustum size in the testing phase. $\hat{d}$ is the ground truth depth in the training phase and the estimated object depth in the testing phase.
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;The RoI frustum approach makes associating overlapping objects effortless, as objects are separated in the 3D
+space and would have separate RoI frustums. It also eliminates the multi-detection association problem, as only the
+closest radar detection inside the RoI frustum is associated
+to the object. It does not, however, help with the inaccurate
+z dimension problem, as radar detections might be outside
+the ROI frustum of their corresponding object due to their
+inaccurate height information.&lt;/p&gt;
+&lt;p&gt;To address the inaccurate height information problem, we introduce a radar point cloud preprocessing step called pillar expansion, where each radar
+point is expanded to a fixed-size pillar, as illustrated in the figure below. Pillars create a better representation for the physical objects detected by the radar, as these detections are now associated with a dimension in the 3D space. Having this new
+representation, we simply consider a radar detection to be
+inside a frustum if all or part of its corresponding pillar is
+inside the frustum, as illustrated in the network architecture figure.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-expanding-radar-points-to-3d-pillars-top-image-directly-mapping-the-pillars-to-the-image-and-replacing-with-radar-depth-information-results-in-poor-association-with-objects-center-and-many-overlapping-depth-values-middle-image-frustum-association-accurately-maps-the-radar-detections-to-the-center-of-objects-and-minimizes-overlapping-bottom-image&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/pillars.jpg&#34; data-caption=&#34;Expanding radar points to 3D pillars (top image). Directly mapping the pillars to the image and replacing with radar depth information results in poor association with objects&amp;#39; center and many overlapping depth values (middle image). Frustum association accurately maps the radar detections to the center of objects and minimizes overlapping (bottom image).&#34;&gt;
+
+
+  &lt;img src=&#34;./images/pillars.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Expanding radar points to 3D pillars (top image). Directly mapping the pillars to the image and replacing with radar depth information results in poor association with objects&#39; center and many overlapping depth values (middle image). Frustum association accurately maps the radar detections to the center of objects and minimizes overlapping (bottom image).
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;In the above figure, radar detections are only associated to objects with a valid ground truth or detection box, and only if all or part of the radar detection pillar is inside the box. Frustum association also prevents associating radar detections caused by background objects such as buildings to foreground objects, as seen in the case of pedestrians on the right hand side of the image.&lt;/p&gt;
+&lt;h3 id=&#34;radar-feature-extraction&#34;&gt;Radar Feature Extraction&lt;/h3&gt;
+&lt;p&gt;After associating radar detections to their corresponding
+objects, we use the depth and velocity of the radar detections to create complementary features for the image. Particularly, for every radar detection associated to an object,
+we generate three heat map channels centered at and inside
+the object’s 2D bounding box, as shown in the figure above. The
+width and height of the heatmaps are proportional to the
+object&amp;rsquo;s 2D bounding box, and are controlled by a parameter $\alpha$. The heatmap values are the normalized object depth
+$d$ and also the $x$ and $y$ components of the radial velocity
+($v_x$ and $v_y$) in the egocentric coordinate system:&lt;/p&gt;
+&lt;p&gt;$$
+\begin{equation*}
+F_{x,y,i}^{j} = \frac{1}{M_i}
+\begin{cases}
+f_i &amp;amp; \hskip{5pt} |x-c_{x}^{j}|\leq \alpha w^j \hspace{5pt} \text{and}
+\hspace{5pt} |y-c_{y}^{i}| \leq \alpha h^j \\&lt;br&gt;
+0 &amp;amp; \hskip{5pt} \text{otherwise}
+\end{cases}
+\end{equation*}
+$$&lt;/p&gt;
+&lt;p&gt;where $i \in 1, 2, 3$ is the feature map channel, $M_i$
+is a normalizing factor, $f_i$ is the feature value ($d$, $v_x$ or $v_y$),
+$c^j_x$ and $c^j_y$ are the $x$ and $y$ coordinates of the $j$th object’s center
+point on the image and $w^j$ and $h^j$ are the width and height of the
+$j$th object’s 2D bounding box. If two objects have
+overlapping heatmap areas, the one with a smaller depth
+value dominates, as only the closest object is fully visible in
+the image.&lt;/p&gt;
+&lt;p&gt;The generated heat maps are then concatenated to the
+image features as extra channels. These features are used
+as inputs to the secondary regression heads to recalculate
+the object’s depth and rotation, as well as velocity and attributes. The velocity regression head estimates the x and
+y components of the object’s actual velocity in the vehicle
+coordinate system. The attribute regression head estimates
+different attributes for different object classes, such as moving or parked for the Car class and standing or sitting for the
+Pedestrian class. The secondary regression heads consist of
+three convolutional layers with 3$\times$3 kernels followed by
+a 1$\times$1 convolutional layer to generate the desired output.
+The extra convolutional layers compared to the primary regression heads help with
+learning higher level features from
+the radar feature maps. The last step is decoding the regression head results into
+3D bounding boxes. The box decoder
+block uses the estimated depth, velocity, rotation, and attributes from the secondary
+regression heads, and takes the other object properties from the primary heads.&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;We compare our radar and camera fusion network with
+the state-of-the-art camera-based models on the nuScenes
+benchmark, and also a LIDAR based method. Table 1
+shows the results on both test and validation splits of the
+nuScenes dataset.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-quantitative-results&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/results_quant.png&#34; data-caption=&#34;Quantitative results&#34;&gt;
+
+
+  &lt;img src=&#34;./images/results_quant.png&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Quantitative results
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;The detection results compared to the ground truth in camera-view and birds eye view
+are shown in the figure below:&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-qualitative-results-from-centerfusion-row-1--2-and-centernet-row-3--4-in-camera-view-and-bev-in-the-bev-plots-detection-boxes-are-shown-in-cyan-and-ground-truth-boxes-in-red-the-radar-point-cloud-is-shown-in-green-red-and-blue-arrows-on-objects-show-the-ground-truth-and-predicted-velocity-vectors-respectively&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/results_qual.png&#34; data-caption=&#34;Qualitative results from CenterFusion (row 1 &amp;amp;amp; 2) and CenterNet (row 3 &amp;amp;amp; 4) in camera view and BEV. In the BEV plots, detection boxes are shown in cyan and ground truth boxes in red. The radar point cloud is shown in green. Red and blue arrows on objects show the ground truth and predicted velocity vectors respectively.&#34;&gt;
+
+
+  &lt;img src=&#34;./images/results_qual.png&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Qualitative results from CenterFusion (row 1 &amp;amp; 2) and CenterNet (row 3 &amp;amp; 4) in camera view and BEV. In the BEV plots, detection boxes are shown in cyan and ground truth boxes in red. The radar point cloud is shown in green. Red and blue arrows on objects show the ground truth and predicted velocity vectors respectively.
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;For a more detailed discussion on the results and also the ablation study, see our
+&lt;a href=&#34;https://arxiv.org/abs/2011.04841&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;WACV 2021 conference paper&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Radar-Camera Sensor Fusion and Depth Estimation</title>
       <link>https://mrnabati.github.io/project/05_radar_camera_fusion/</link>
       <pubDate>Wed, 14 Oct 2020 21:08:24 -0500</pubDate>
