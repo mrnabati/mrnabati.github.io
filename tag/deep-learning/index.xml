@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deep Learning | Ramin&#39;s Homepage</title>
+    <link>https://mrnabati.github.io/tag/deep-learning/</link>
+      <atom:link href="https://mrnabati.github.io/tag/deep-learning/index.xml" rel="self" type="application/rss+xml" />
+    <description>Deep Learning</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2020 Ramin Nabati</copyright><lastBuildDate>Mon, 22 Jun 2020 20:17:31 -0400</lastBuildDate>
+    <image>
+      <url>https://mrnabati.github.io/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Deep Learning</title>
+      <link>https://mrnabati.github.io/tag/deep-learning/</link>
+    </image>
+    
+    <item>
+      <title>Adv. PyTorch: Configuring MS Visual Studio for Using PyToch C&#43;&#43; API in Windows</title>
+      <link>https://mrnabati.github.io/post/004_adv_pytorch_integrating_pytorch_cpp_frontend_in_visual_studio_on_windows/</link>
+      <pubDate>Mon, 22 Jun 2020 20:17:31 -0400</pubDate>
+      <guid>https://mrnabati.github.io/post/004_adv_pytorch_integrating_pytorch_cpp_frontend_in_visual_studio_on_windows/</guid>
+      <description>&lt;p&gt;This tutorial will walk you through the required steps to configure
+and use the PyTorch C++ API (LibTorch) in Microsoft Visual Studio. Although
+the recommended build system for LibTorch is CMake, you might find yourself in
+situations where you need to integrate your code into an existing Visual Studio
+Project/Solution and don&amp;rsquo;t want to deal with CMake files in Windows. Following
+the steps in this tutorial should get you up and running with LibTorch in
+Visual Studio without needing to use CMake to build it. These steps
+have been tested on Visual Studio 2019 and the CPU version of LibTorch 1.5.1.
+Let&amp;rsquo;s get started!&lt;/p&gt;
+&lt;h2 id=&#34;step-1-download-libtorch&#34;&gt;Step 1: Download LibTorch&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Download and extract the CPU version of LibTorch for Windows from &lt;a href=&#34;https://pytorch.org/get-started/locally/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.
+Note that the &lt;strong&gt;Release&lt;/strong&gt; and &lt;strong&gt;Debug&lt;/strong&gt; versions have different download links,
+so get the one you need depending on your target configuration. We work with the
+Debug version here.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;assets/013_1.png&#34; alt=&#34;img1&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-2-set-windows-environment-variables&#34;&gt;Step 2: Set Windows Environment Variables&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;We&amp;rsquo;re going to create some environment variables to make things easier. Use the
+following commands in a Windows Terminal to create an environment variable for
+the LibTorch directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;setx LIBTORCH_DEBUG_HOME &amp;quot;C:\libtorch-debug-v1.5.1&amp;quot;
+set LIBTORCH_DEBUG_HOME &amp;quot;C:\libtorch-debug-v1.5.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where &lt;code&gt;&amp;quot;C:\libtorch-debug-v1.5.1&amp;quot;&lt;/code&gt; is the path to the extracted LibTorch
+directory on your computer. Note that the &lt;code&gt;setx&lt;/code&gt; command creates the variable
+globally for Windows, and the &lt;code&gt;set&lt;/code&gt; command creates it just for the current
+session.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;If you want to build PyTorch C++ extensions, you&amp;rsquo;ll need to add the Python
+header files to your Visual Studio project. Use the following commands to
+create environment variables for your Python path. Note that if Python
+was installed as part of the Visual Studio, the Python directory
+should be in &lt;code&gt;&amp;quot;C:\Program Files (x86)\Microsoft Visual Studio\Shared&amp;quot;&lt;/code&gt;. Otherwise
+locate your Python installation directory and change the path accordingly.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;setx PYTHON_HOME &amp;quot;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64&amp;quot;
+set PYTHON_HOME &amp;quot;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-3-configure-your-visual-studio-project&#34;&gt;Step 3: Configure Your Visual Studio Project&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Open Visual Studio, create a project and make sure the Platform is set to
+&lt;strong&gt;x64&lt;/strong&gt;. Following &lt;a href=&#34;https://pytorch.org/tutorials/advanced/cpp_frontend.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;this tutorial&lt;/a&gt;,
+let&amp;rsquo;s create a simple C++ file called &lt;code&gt;dcgan.cpp&lt;/code&gt; with the following contents
+to test our setup later.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;torch\torch.h&amp;gt;
+#include &amp;lt;iostream&amp;gt;
+
+int main(){
+    torch::Tensor tensor = torch::eye(3);
+    std::cout &amp;lt;&amp;lt; tensor &amp;lt;&amp;lt; std::endl;
+    return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In &lt;strong&gt;Project Properties&lt;/strong&gt; under &lt;code&gt;C/C++ -&amp;gt; General -&amp;gt; Additional Include Directories&lt;/code&gt; add
+the path to LibTorch and Python include folders:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$(LIBTORCH_DEBUG_HOME)\include
+$(PYTHON_HOME)\include
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;assets/013_2.PNG&#34; alt=&#34;img2&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In &lt;strong&gt;Project Properties&lt;/strong&gt; under &lt;code&gt;Linker -&amp;gt; General -&amp;gt; Additional Library Directories&lt;/code&gt; add
+the path to LibTorch and Python lib folders:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; $(LIBTORCH_DEBUG_HOME)\lib
+ $(PYTHON_HOME)\lib
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;assets/013_3.PNG&#34; alt=&#34;img2&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In &lt;strong&gt;Project Properties&lt;/strong&gt; under &lt;code&gt;Linker -&amp;gt; Input -&amp;gt; Additional Dependencies&lt;/code&gt;
+add the following libraries:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt; torch.lib
+ torch_cpu.lib
+ c10.lib
+ python37.lib
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;assets/013_4.PNG&#34; alt=&#34;img2&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;We also need to add a &lt;strong&gt;Post-Build Event&lt;/strong&gt; to copy all the LibTorch &lt;code&gt;dll&lt;/code&gt;
+files to the target directory after every build. Without these files you&amp;rsquo;ll be
+getting a runtime error when executing your program. In &lt;strong&gt;Project Properties&lt;/strong&gt; under
+&lt;code&gt;Build Events -&amp;gt; Post-Build Event -&amp;gt; Command Line&lt;/code&gt; add the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;copy /y $(LIBTORCH_DEBUG_HOME)\lib\*.dll $(TargetDir)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;assets/013_5.PNG&#34; alt=&#34;img2&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;step-4-build-and-run-the-code&#34;&gt;Step 4: Build and Run the Code&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Now you can go ahead and build the project. Make sure you choose the same
+build configuration (Debug/Release) as the downloaded LibTorch package. To
+test our setup, run the generated executable file. The output should be a
+3x3 diagonal matrix:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; 1  0  0
+ 0  1  0
+ 0  0  1
+[ CPUFloatType{3,3} ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adv. PyTorch: Modifying the Last Layer</title>
+      <link>https://mrnabati.github.io/post/003_adv_pytorch_modifying_the_last_layer/</link>
+      <pubDate>Sun, 21 Jun 2020 16:42:11 -0400</pubDate>
+      <guid>https://mrnabati.github.io/post/003_adv_pytorch_modifying_the_last_layer/</guid>
+      <description>&lt;p&gt;All the pre-trained models provided in the &lt;code&gt;torchvision&lt;/code&gt; package in PyTorch are
+trained on the &lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ImageNet&lt;/a&gt; dataset and can be used out
+of the box on this dataset. But often times you want to use these models on
+other available image datasets or even your own custom dataset. This usually
+requires modifying and fine-tuning the model to work with the new dataset.
+Changing the output dimension of the last layer in the model is usually among
+the first changes you need to make, and that&amp;rsquo;s the focus of this post.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s start with loading a pre-trained model from the &lt;code&gt;torchvision&lt;/code&gt; package. We
+use the &lt;a href=&#34;https://arxiv.org/abs/1409.1556&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;VGG16&lt;/a&gt; model, pretrained on the
+ImageNet dataset with 1000 object categories. Let&amp;rsquo;s take a look at the modules
+on this model:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import torch
+import torch.nn as nn
+import torchvision.models as models
+
+vgg16 = models.vgg16(pretrained=True)
+print(vgg16._modules.keys())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;odict_keys([&#39;features&#39;, &#39;avgpool&#39;, &#39;classifier&#39;])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We are only interested in the last layer, so let&amp;rsquo;s print the layers in the
+&amp;lsquo;classifier&amp;rsquo; module:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(vgg16._modules[&#39;classifier&#39;])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Sequential(
+  (0): Linear(in_features=25088, out_features=4096, bias=True)
+  (1): ReLU(inplace=True)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=4096, out_features=4096, bias=True)
+  (4): ReLU(inplace=True)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=4096, out_features=1000, bias=True)
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As expected, the output dimension for the last layer is 1000. Let&amp;rsquo;s assume we
+are going to use this model on the &lt;a href=&#34;http://cocodataset.org/#home&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;COCO dataset&lt;/a&gt;
+with 80 object categories. To change the output dimension of the model to 80,
+we simply replace the last sub-layer with a new Linear layer. The Linear layer
+takes two required arguments: &lt;code&gt;in_features&lt;/code&gt; and &lt;code&gt;out_features&lt;/code&gt;. The &lt;code&gt;in_features&lt;/code&gt;
+is going to be the same as before, and &lt;code&gt;out_features&lt;/code&gt; is goint to be 80:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;in_features = vgg16._modules[&#39;classifier&#39;][-1].in_features
+out_features = 80
+vgg16._modules[&#39;classifier&#39;][-1] = nn.Linear(in_features, out_features, bias=True)
+print(vgg16._modules[&#39;classifier&#39;])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Sequential(
+  (0): Linear(in_features=25088, out_features=4096, bias=True)
+  (1): ReLU(inplace=True)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=4096, out_features=4096, bias=True)
+  (4): ReLU(inplace=True)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=4096, out_features=80, bias=True)
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;rsquo;s it! The output dimension is now 80. You need to keep in mind that by
+replacing the last layer we removed any learned parameter in this layer. You
+need to finetune the model on the new dataset at this point to learn the
+parameters again.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Adv. PyTorch: Freezing Layers</title>
+      <link>https://mrnabati.github.io/post/002_adv_pytorch_freezing_layers/</link>
+      <pubDate>Fri, 22 May 2020 13:42:11 -0400</pubDate>
+      <guid>https://mrnabati.github.io/post/002_adv_pytorch_freezing_layers/</guid>
+      <description>&lt;p&gt;If you&amp;rsquo;re planning to fine-tune a trained model on a different dataset, chances
+are you&amp;rsquo;re going to freeze some of the early layers and only update the later
+layers. I won&amp;rsquo;t go into the details of why you may want to freeze some layers
+and which ones should be frozen, but I&amp;rsquo;ll show you how to do it in PyTorch.
+Let&amp;rsquo;s get started!&lt;/p&gt;
+&lt;p&gt;We first need a pre-trained model to start with. The
+&lt;a href=&#34;https://pytorch.org/docs/stable/torchvision/models.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;models subpackage&lt;/a&gt; in
+the &lt;code&gt;torchvision&lt;/code&gt; package provides definitions for many of the poplular model
+architectures for image classification. You can construct these models by simply
+calling their constructor, which would initialize the model with random weights.
+To use the pre-trained models from the PyTorch Model Zoo, you can call the
+constructor with the &lt;code&gt;pretrained=True&lt;/code&gt; argument. Let&amp;rsquo;s load the pretrained
+VGG16 model:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import torch
+import torch.nn as nn
+import torchvision.models as models
+
+vgg16 = models.vgg16(pretrained=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will start downloading the pretrained model into your computer&amp;rsquo;s PyTorch
+cache folder, which usually is the &lt;code&gt;.cache/torch/checkpoints&lt;/code&gt; folder under your
+home directory.&lt;/p&gt;
+&lt;p&gt;There are multiple ways you can look into the model to see its modules and
+layers. One way is using the &lt;code&gt;.modules()&lt;/code&gt; member function, which returns in
+iterator containing all the member objects of the model. The &lt;code&gt;.modules()&lt;/code&gt;
+functions recursively goes thruogh all the modules and submodules of the model:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(list(vgg16.modules()))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[VGG(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU(inplace=True)
+    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU(inplace=True)
+    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): ReLU(inplace=True)
+    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (8): ReLU(inplace=True)
+    (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace=True)
+    (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): ReLU(inplace=True)
+    (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (15): ReLU(inplace=True)
+    (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (18): ReLU(inplace=True)
+    (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (20): ReLU(inplace=True)
+    (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (22): ReLU(inplace=True)
+    (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (25): ReLU(inplace=True)
+    (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (27): ReLU(inplace=True)
+    (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (29): ReLU(inplace=True)
+    (30): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))
+  (classifier): Sequential(
+    (0): Linear(in_features=25088, out_features=4096, bias=True)
+    (1): ReLU(inplace=True)
+    (2): Dropout(p=0.5, inplace=False)
+    (3): Linear(in_features=4096, out_features=4096, bias=True)
+    (4): ReLU(inplace=True)
+    (5): Dropout(p=0.5, inplace=False)
+    (6): Linear(in_features=4096, out_features=1000, bias=True)
+  )
+), Sequential(
+  (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (1): ReLU(inplace=True)
+  (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (3): ReLU(inplace=True)
+  (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (6): ReLU(inplace=True)
+  (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (8): ReLU(inplace=True)
+  (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (11): ReLU(inplace=True)
+  (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (13): ReLU(inplace=True)
+  (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (15): ReLU(inplace=True)
+  (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (18): ReLU(inplace=True)
+  (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (20): ReLU(inplace=True)
+  (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (22): ReLU(inplace=True)
+  (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (25): ReLU(inplace=True)
+  (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (27): ReLU(inplace=True)
+  (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (29): ReLU(inplace=True)
+  (30): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+), Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), AdaptiveAvgPool2d(output_size=(7, 7)), Sequential(
+  (0): Linear(in_features=25088, out_features=4096, bias=True)
+  (1): ReLU(inplace=True)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=4096, out_features=4096, bias=True)
+  (4): ReLU(inplace=True)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=4096, out_features=1000, bias=True)
+), Linear(in_features=25088, out_features=4096, bias=True), ReLU(inplace=True), Dropout(p=0.5, inplace=False), Linear(in_features=4096, out_features=4096, bias=True), ReLU(inplace=True), Dropout(p=0.5, inplace=False), Linear(in_features=4096, out_features=1000, bias=True)]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;rsquo;s a lot of information spewed out onto the screen! Let&amp;rsquo;s use the
+&lt;code&gt;.named_module()&lt;/code&gt; function instead, which returns a (name, module) tuple and
+only print the names:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for (name, module) in vgg16.named_modules():
+    print(name)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;features
+features.0
+features.1
+features.2
+features.3
+features.4
+features.5
+features.6
+features.7
+features.8
+features.9
+features.10
+features.11
+features.12
+features.13
+features.14
+features.15
+features.16
+features.17
+features.18
+features.19
+features.20
+features.21
+features.22
+features.23
+features.24
+features.25
+features.26
+features.27
+features.28
+features.29
+features.30
+avgpool
+classifier
+classifier.0
+classifier.1
+classifier.2
+classifier.3
+classifier.4
+classifier.5
+classifier.6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That&amp;rsquo;s much better! We can see the top level modules are &lt;em&gt;features&lt;/em&gt;, &lt;em&gt;avgpool&lt;/em&gt;
+and &lt;em&gt;classifier&lt;/em&gt;. We can also see that the &lt;em&gt;features&lt;/em&gt; and &lt;em&gt;calssifier&lt;/em&gt; modules
+consist of 31 and 7 layers respectively. These layers are not named, and only
+have numbers associated with them. If you want to see an even more concise
+representation of the network, you can use the &lt;code&gt;.named_children()&lt;/code&gt; function
+which does not go inside the top level modules recursively:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for (name, module) in vgg16.named_children():
+    print(name)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;features
+avgpool
+classifier
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now let&amp;rsquo;s see what layers are there under the &lt;em&gt;features&lt;/em&gt; module. Here we use the
+&lt;code&gt;.children()&lt;/code&gt; function to get the layers under the &lt;em&gt;features&lt;/em&gt; module, since
+these layers are not &amp;lsquo;named&amp;rsquo;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for (name, module) in vgg16.named_children():
+    if name == &#39;features&#39;:
+        for layer in module.children():
+            print(layer)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can even go deeper and look at the parameters in each layer. Let&amp;rsquo;s get the
+parameters of the first layer under the &lt;em&gt;features&lt;/em&gt; module:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for (name, module) in vgg16.named_children():
+    if name == &#39;features&#39;:
+        for layer in module.children():
+            for param in layer.parameters():
+                print(param)
+            break
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Parameter containing:
+tensor([[[[-5.5373e-01,  1.4270e-01,  5.2896e-01],
+          [-5.8312e-01,  3.5655e-01,  7.6566e-01],
+          [-6.9022e-01, -4.8019e-02,  4.8409e-01]],
+
+         [[ 1.7548e-01,  9.8630e-03, -8.1413e-02],
+          [ 4.4089e-02, -7.0323e-02, -2.6035e-01],
+          [ 1.3239e-01, -1.7279e-01, -1.3226e-01]],
+
+         [[ 3.1303e-01, -1.6591e-01, -4.2752e-01],
+          [ 4.7519e-01, -8.2677e-02, -4.8700e-01],
+          [ 6.3203e-01,  1.9308e-02, -2.7753e-01]]],
+
+
+        [[[ 2.3254e-01,  1.2666e-01,  1.8605e-01],
+          [-4.2805e-01, -2.4349e-01,  2.4628e-01],
+          [-2.5066e-01,  1.4177e-01, -5.4864e-03]],
+
+         [[-1.4076e-01, -2.1903e-01,  1.5041e-01],
+          [-8.4127e-01, -3.5176e-01,  5.6398e-01],
+          [-2.4194e-01,  5.1928e-01,  5.3915e-01]],
+
+         [[-3.1432e-01, -3.7048e-01, -1.3094e-01],
+          [-4.7144e-01, -1.5503e-01,  3.4589e-01],
+          [ 5.4384e-02,  5.8683e-01,  4.9580e-01]]],
+
+
+        [[[ 1.7715e-01,  5.2149e-01,  9.8740e-03],
+          [-2.7185e-01, -7.1709e-01,  3.1292e-01],
+          [-7.5753e-02, -2.2079e-01,  3.3455e-01]],
+
+         [[ 3.0924e-01,  6.7071e-01,  2.0546e-02],
+          [-4.6607e-01, -1.0697e+00,  3.3501e-01],
+          [-8.0284e-02, -3.0522e-01,  5.4460e-01]],
+
+         [[ 3.1572e-01,  4.2335e-01, -3.4976e-01],
+          [ 8.6354e-02, -4.6457e-01,  1.1803e-02],
+          [ 1.0483e-01, -1.4584e-01, -1.5765e-02]]],
+
+
+        ...,
+
+
+        [[[ 7.7599e-02,  1.2692e-01,  3.2305e-02],
+          [ 2.2131e-01,  2.4681e-01, -4.6637e-02],
+          [ 4.6407e-02,  2.8246e-02,  1.7528e-02]],
+
+         [[-1.8327e-01, -6.7425e-02, -7.2120e-03],
+          [-4.8855e-02,  7.0427e-03, -1.2883e-01],
+          [-6.4601e-02, -6.4566e-02,  4.4235e-02]],
+
+         [[-2.2547e-01, -1.1931e-01, -2.3425e-02],
+          [-9.9171e-02, -1.5143e-02,  9.5385e-04],
+          [-2.6137e-02,  1.3567e-03,  1.4282e-01]]],
+
+
+        [[[ 1.6520e-02, -3.2225e-02, -3.8450e-03],
+          [-6.8206e-02, -1.9445e-01, -1.4166e-01],
+          [-6.9528e-02, -1.8340e-01, -1.7422e-01]],
+
+         [[ 4.2781e-02, -6.7529e-02, -7.0309e-03],
+          [ 1.1765e-02, -1.4958e-01, -1.2361e-01],
+          [ 1.0205e-02, -1.0393e-01, -1.1742e-01]],
+
+         [[ 1.2661e-01,  8.5046e-02,  1.3066e-01],
+          [ 1.7585e-01,  1.1288e-01,  1.1937e-01],
+          [ 1.4656e-01,  9.8892e-02,  1.0348e-01]]],
+
+
+        [[[ 3.2176e-02, -1.0766e-01, -2.6388e-01],
+          [ 2.7957e-01, -3.7416e-02, -2.5471e-01],
+          [ 3.4872e-01,  3.0041e-02, -5.5898e-02]],
+
+         [[ 2.5063e-01,  1.5543e-01, -1.7432e-01],
+          [ 3.9255e-01,  3.2306e-02, -3.5191e-01],
+          [ 1.9299e-01, -1.9898e-01, -2.9713e-01]],
+
+         [[ 4.6032e-01,  4.3399e-01,  2.8352e-01],
+          [ 1.6341e-01, -5.8165e-02, -1.9196e-01],
+          [-1.9521e-01, -4.5630e-01, -4.2732e-01]]]], requires_grad=True)
+Parameter containing:
+tensor([ 0.4034,  0.3778,  0.4644, -0.3228,  0.3940, -0.3953,  0.3951, -0.5496,
+         0.2693, -0.7602, -0.3508,  0.2334, -1.3239, -0.1694,  0.3938, -0.1026,
+         0.0460, -0.6995,  0.1549,  0.5628,  0.3011,  0.3425,  0.1073,  0.4651,
+         0.1295,  0.0788, -0.0492, -0.5638,  0.1465, -0.3890, -0.0715,  0.0649,
+         0.2768,  0.3279,  0.5682, -1.2640, -0.8368, -0.9485,  0.1358,  0.2727,
+         0.1841, -0.5325,  0.3507, -0.0827, -1.0248, -0.6912, -0.7711,  0.2612,
+         0.4033, -0.4802, -0.3066,  0.5807, -1.3325,  0.4844, -0.8160,  0.2386,
+         0.2300,  0.4979,  0.5553,  0.5230, -0.2182,  0.0117, -0.5516,  0.2108],
+       requires_grad=True)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have access to all the modules, layers and their parameters, we can
+easily freeze them by setting the parameters&#39; &lt;code&gt;requires_grad&lt;/code&gt; flag to &lt;code&gt;False&lt;/code&gt;.
+This would prevent calculating the gradients for these parameters in the
+&lt;code&gt;backward&lt;/code&gt; step which in turn prevents the optimizer from updating them.&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s freeze all the parameters in the &lt;em&gt;features&lt;/em&gt; module:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;layer_counter = 0
+for (name, module) in vgg16.named_children():
+    if name == &#39;features&#39;:
+        for layer in module.children():
+            for param in layer.parameters():
+                param.requires_grad = False
+            
+            print(&#39;Layer &amp;quot;{}&amp;quot; in module &amp;quot;{}&amp;quot; was frozen!&#39;.format(layer_counter, name))
+            layer_counter+=1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Layer &amp;quot;0&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;1&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;2&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;3&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;4&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;5&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;6&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;7&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;8&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;9&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;10&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;11&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;12&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;13&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;14&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;15&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;16&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;17&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;18&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;19&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;20&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;21&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;22&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;23&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;24&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;25&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;26&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;27&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;28&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;29&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+Layer &amp;quot;30&amp;quot; in module &amp;quot;features&amp;quot; was frozen!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that some of the parameters are frozen, the optimizer needs to be modified
+to only get the parameters with &lt;code&gt;requires_grad=True&lt;/code&gt;. We can do this by writing
+a Lambda function when constructing the optimizer:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, vgg16.parameters()), lr=0.001)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can now start training your partially frozen model!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

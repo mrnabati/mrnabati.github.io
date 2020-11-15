@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sensor Fusion | Ramin&#39;s Homepage</title>
+    <link>https://mrnabati.github.io/tag/sensor-fusion/</link>
+      <atom:link href="https://mrnabati.github.io/tag/sensor-fusion/index.xml" rel="self" type="application/rss+xml" />
+    <description>Sensor Fusion</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2020 Ramin Nabati</copyright><lastBuildDate>Thu, 12 Nov 2020 23:29:22 -0500</lastBuildDate>
+    <image>
+      <url>https://mrnabati.github.io/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Sensor Fusion</title>
+      <link>https://mrnabati.github.io/tag/sensor-fusion/</link>
+    </image>
+    
+    <item>
+      <title>CenterFusion: Center-based Radar and Camera Fusion for 3D Object Detection</title>
+      <link>https://mrnabati.github.io/publication/03_centerfusion/</link>
+      <pubDate>Thu, 12 Nov 2020 23:29:22 -0500</pubDate>
+      <guid>https://mrnabati.github.io/publication/03_centerfusion/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Radar-Camera Sensor Fusion and Depth Estimation</title>
+      <link>https://mrnabati.github.io/project/05_radar_camera_fusion/</link>
+      <pubDate>Wed, 14 Oct 2020 21:08:24 -0500</pubDate>
+      <guid>https://mrnabati.github.io/project/05_radar_camera_fusion/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;In this project, we designed and implemented a radar-camera fusion algorithm for joint object detection and distance estimation in
+autonomous driving applications. The proposed method is
+designed as a two-stage object detection network that fuses
+radar point clouds and learned image features to generate
+accurate object proposals. For every object proposal, a depth
+value is also calculated to estimate the object’s distance from
+the vehicle. These proposals are then fed into the second
+stage of the detection network for object classification. We
+evaluate our network on the &lt;a href=&#34;https://www.nuscenes.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;nuScenes dataset&lt;/a&gt;, which
+provides synchronized data from multiple radar and camera
+sensors on a vehicle. Our experiments show that the proposed
+method outperforms other radar-camera fusion methods in
+the object detection task and is capable of accurately estimating distance for all detected objects.&lt;/p&gt;
+&lt;h2 id=&#34;approach&#34;&gt;Approach&lt;/h2&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-network-architecture&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/architecture.jpg&#34; data-caption=&#34;Network architecture&#34;&gt;
+
+
+  &lt;img src=&#34;./images/architecture.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Network architecture
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Our proposed sensor fusion network is shown in the figure above.
+The network takes radar point clouds and RGB images as
+input and generates accurate object proposals for a two-stage
+object detection framework. We take a middle-fusion approach for fusing the radar and image data, where outputs of each sensor are processed independently first, and are merged
+at a later stage for more processing. More specifically, we
+first use the radar detections to generate 3D object proposals,
+then map the proposals to the image and use the image
+features extracted by a backbone network to improve their
+localization. These proposals are then merged with image-based proposals generated in a RPN, and are fed to the
+second stage for classification. All generated proposals are
+associated with an estimated depth, calculated either directly
+from the radar detections, or via a distance regressor layer
+in the RPN network.&lt;/p&gt;
+&lt;h3 id=&#34;proposal-generation&#34;&gt;Proposal Generation&lt;/h3&gt;
+&lt;p&gt;We treat every radar point as a
+stand-alone detection and generate 3D object proposals for
+them directly without any feature extraction. These proposals
+are generated using predefined 3D anchors for every object
+class in the dataset. Each 3D anchor is parameterized as
+$(x, y, z, w, l, h, r)$, where $(x, y, z)$ is the center, $(w, l, h)$ is
+the size, and $r$ is the orientation of the box in vehicle’s
+coordinate system. The anchor size, $(w, l, h)$, is fixed for
+each object category, and is set to the average size of the
+objects in each category in the training dataset. For every radar point, we generate $2n$
+boxes from the 3D anchors, where $n$ is the number of object
+classes in the dataset, each having two different orientations at $0 $ and $90$ degrees. The 3D anchors for a radar detection is shown in the figure below:&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-3d-anchors-for-one-radar-detection-point&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/3d_prop.jpg&#34; data-caption=&#34;3D anchors for one radar detection point&#34;&gt;
+
+
+  &lt;img src=&#34;./images/3d_prop.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    3D anchors for one radar detection point
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;In the next step, all 3D anchors are mapped to the image
+plane and converted to equivalent 2D bounding boxes by
+finding the smallest enclosing box for each mapped anchor. Since every 3D proposal is generated from a radar detection,
+it has an accurate distance associated with it. This distance is
+used as the proposed distance for the generated 2D bounding
+box. This is illustrated in the figure below:&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-3d-anchors-for-one-radar-detection-point&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/2d_prop.jpg&#34; data-caption=&#34;3D anchors for one radar detection point&#34;&gt;
+
+
+  &lt;img src=&#34;./images/2d_prop.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    3D anchors for one radar detection point
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;All generated 2D proposals are fed into the
+Radar Proposal Refinement (RPR) subnetwork. This is where
+the information obtained from the radars (radar proposals) is
+fused with the information obtained from the camera (image
+features). RPR uses the features extracted from the image
+by the backbone network to adjust the size and location
+of the radar proposals on the image. As radar detections
+are not always centered on the corresponding objects on
+the image, the generated 3D anchors and corresponding 2D
+proposals might be offset as well. The box regressor layer in
+the RPR uses the image features inside each radar proposal
+to regress offset values for the proposal corner points. The
+RPR also contains a box classification layer, which estimates
+an objectness score for every radar proposal. The objectness
+score is used to eliminate proposals that are generated by
+radar detections coming from background objects, such as
+buildings and light poles. Figures below show the resulting 2D radar
+proposals before and after the refinement step.&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-radar-proposals-before-refinement&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/2d_all_before.jpg&#34; data-caption=&#34;Radar proposals before refinement&#34;&gt;
+
+
+  &lt;img src=&#34;./images/2d_all_before.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Radar proposals before refinement
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-radar-proposals-after-refinement&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/2d_all_after.jpg&#34; data-caption=&#34;Radar proposals after refinement&#34;&gt;
+
+
+  &lt;img src=&#34;./images/2d_all_after.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Radar proposals after refinement
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;The Radar proposals are then merged with image-based proposals obtained from a Region Proposal Network (RPN). Before using these proposals in the next
+stage, redundant proposals are removed by applying NonMaximum Suppression (NMS). The NMS would normally
+remove overlapping proposals without discriminating based
+on the bounding box’s origin, but we note that radar-based
+proposals have more reliable distance information than the
+image-based proposals. This is because image-based distances are estimated only from 2D image feature maps with
+no depth information. To make sure the radar-based distances
+are not unnecessarily discarded in the NMS process, we
+first calculate the Intersection over Union (IoU) between
+radar and image proposals. Next we use an IoU threshold
+to find the matching proposals, and overwrite the imagebased distances by their radar-based counterparts for these
+matching proposals.&lt;/p&gt;
+&lt;h3 id=&#34;detection-network&#34;&gt;Detection Network&lt;/h3&gt;
+&lt;p&gt;The inputs to the second stage detection network are
+the feature map from the image and object proposals. The
+structure of this network is similar to &lt;a href=&#34;https://arxiv.org/pdf/1504.08083.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Fast R-CNN&lt;/a&gt;. The
+feature map is cropped for every object proposals and is fed
+into the RoI pooling layer to obtain feature vectors of the
+same size for all proposals. These feature vectors are further
+processed by a set of fully connected layers and are passed to
+the softmax and bounding box regression layers. The output
+is the category classification and bounding box regression
+for each proposal, in addition to the distance associated to
+every detected object. Similar to the RPN network, we use
+a cross entropy loss for object classification and a Smooth
+L1 loss for the box regression layer.&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;The performance of our method is shown in the table below. This
+table shows the overall Average Precision (AP) and Average
+Recall (AR) for the detection task, and Mean Absolute
+Error for the distance estimation task. We use the &lt;a href=&#34;https://arxiv.org/pdf/1506.01497.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Faster RCNN&lt;/a&gt; network as our image-based detection baseline, and
+compare our results with &lt;a href=&#34;https://arxiv.org/pdf/1905.00526.pdf&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;RRPN&lt;/a&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;AP&lt;/th&gt;
+&lt;th&gt;AP50&lt;/th&gt;
+&lt;th&gt;AP75&lt;/th&gt;
+&lt;th&gt;AR&lt;/th&gt;
+&lt;th&gt;MAE&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Faster R-CNN&lt;/td&gt;
+&lt;td&gt;34.95&lt;/td&gt;
+&lt;td&gt;58.23&lt;/td&gt;
+&lt;td&gt;36.89&lt;/td&gt;
+&lt;td&gt;40.21&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RRPN&lt;/td&gt;
+&lt;td&gt;35.45&lt;/td&gt;
+&lt;td&gt;59.00&lt;/td&gt;
+&lt;td&gt;37.00&lt;/td&gt;
+&lt;td&gt;42.10&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ours&lt;/td&gt;
+&lt;td&gt;35.60&lt;/td&gt;
+&lt;td&gt;60.53&lt;/td&gt;
+&lt;td&gt;37.38&lt;/td&gt;
+&lt;td&gt;42.10&lt;/td&gt;
+&lt;td&gt;2.65&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The per-class performance is show in the table below:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Method&lt;/th&gt;
+&lt;th&gt;Car&lt;/th&gt;
+&lt;th&gt;Truck&lt;/th&gt;
+&lt;th&gt;Person&lt;/th&gt;
+&lt;th&gt;Bus&lt;/th&gt;
+&lt;th&gt;Bicycle&lt;/th&gt;
+&lt;th&gt;Motorcycle&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Faster R-CNN&lt;/td&gt;
+&lt;td&gt;51.46&lt;/td&gt;
+&lt;td&gt;33.26&lt;/td&gt;
+&lt;td&gt;27.06&lt;/td&gt;
+&lt;td&gt;47.73&lt;/td&gt;
+&lt;td&gt;24.27&lt;/td&gt;
+&lt;td&gt;25.93&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;RRPN&lt;/td&gt;
+&lt;td&gt;41.80&lt;/td&gt;
+&lt;td&gt;44.70&lt;/td&gt;
+&lt;td&gt;17.10&lt;/td&gt;
+&lt;td&gt;57.20&lt;/td&gt;
+&lt;td&gt;21.40&lt;/td&gt;
+&lt;td&gt;30.50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Ours&lt;/td&gt;
+&lt;td&gt;52.31&lt;/td&gt;
+&lt;td&gt;34.45&lt;/td&gt;
+&lt;td&gt;27.59&lt;/td&gt;
+&lt;td&gt;48.30&lt;/td&gt;
+&lt;td&gt;25.00&lt;/td&gt;
+&lt;td&gt;25.97&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Figures below show the detection results for two different scenes:&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure &gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/res_1.jpg&#34; &gt;
+
+
+  &lt;img src=&#34;./images/res_1.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+
+&lt;/figure&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;figure id=&#34;figure-detection-results&#34;&gt;
+
+
+  &lt;a data-fancybox=&#34;&#34; href=&#34;./images/res_2.jpg&#34; data-caption=&#34;Detection results&#34;&gt;
+
+
+  &lt;img src=&#34;./images/res_2.jpg&#34; alt=&#34;&#34;  &gt;
+&lt;/a&gt;
+
+
+  
+  
+  &lt;figcaption&gt;
+    Detection results
+  &lt;/figcaption&gt;
+
+
+&lt;/figure&gt;
+
+</description>
+    </item>
+    
+    <item>
+      <title>Radar-Camera Sensor Fusion for Joint Object Detection and Distance Estimation in Autonomous Vehicles</title>
+      <link>https://mrnabati.github.io/publication/02_radar-camera-sensor-fusion-for-joint-object-detection-and-distance-estimation-in-autonomous-vehicles/</link>
+      <pubDate>Sat, 09 May 2020 16:26:42 -0400</pubDate>
+      <guid>https://mrnabati.github.io/publication/02_radar-camera-sensor-fusion-for-joint-object-detection-and-distance-estimation-in-autonomous-vehicles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RRPN: Radar Region Proposal Network for Object Detection in Autonomous Vehicles</title>
+      <link>https://mrnabati.github.io/publication/00_rrpn-adar-region-proposal-network-for-object-detection-in-autonomous-vehicles/</link>
+      <pubDate>Thu, 02 May 2019 23:35:00 +0000</pubDate>
+      <guid>https://mrnabati.github.io/publication/00_rrpn-adar-region-proposal-network-for-object-detection-in-autonomous-vehicles/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

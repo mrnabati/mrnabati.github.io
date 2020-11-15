@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Publications | Ramin&#39;s Homepage</title>
+    <link>https://mrnabati.github.io/publication/</link>
+      <atom:link href="https://mrnabati.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
+    <description>Publications</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2020 Ramin Nabati</copyright><lastBuildDate>Thu, 12 Nov 2020 23:29:22 -0500</lastBuildDate>
+    <image>
+      <url>https://mrnabati.github.io/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Publications</title>
+      <link>https://mrnabati.github.io/publication/</link>
+    </image>
+    
+    <item>
+      <title>CenterFusion: Center-based Radar and Camera Fusion for 3D Object Detection</title>
+      <link>https://mrnabati.github.io/publication/03_centerfusion/</link>
+      <pubDate>Thu, 12 Nov 2020 23:29:22 -0500</pubDate>
+      <guid>https://mrnabati.github.io/publication/03_centerfusion/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Radar-Camera Sensor Fusion for Joint Object Detection and Distance Estimation in Autonomous Vehicles</title>
+      <link>https://mrnabati.github.io/publication/02_radar-camera-sensor-fusion-for-joint-object-detection-and-distance-estimation-in-autonomous-vehicles/</link>
+      <pubDate>Sat, 09 May 2020 16:26:42 -0400</pubDate>
+      <guid>https://mrnabati.github.io/publication/02_radar-camera-sensor-fusion-for-joint-object-detection-and-distance-estimation-in-autonomous-vehicles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RRPN: Radar Region Proposal Network for Object Detection in Autonomous Vehicles</title>
+      <link>https://mrnabati.github.io/publication/00_rrpn-adar-region-proposal-network-for-object-detection-in-autonomous-vehicles/</link>
+      <pubDate>Thu, 02 May 2019 23:35:00 +0000</pubDate>
+      <guid>https://mrnabati.github.io/publication/00_rrpn-adar-region-proposal-network-for-object-detection-in-autonomous-vehicles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Machine-Assisted Annotation of Forensic Imagery</title>
+      <link>https://mrnabati.github.io/publication/01_machine-assisted-annotation-of-forensic-imagery/</link>
+      <pubDate>Wed, 01 May 2019 23:37:00 +0000</pubDate>
+      <guid>https://mrnabati.github.io/publication/01_machine-assisted-annotation-of-forensic-imagery/</guid>
+      <description>&lt;!-- More detail can easily be written here using *Markdown* and $\rm \LaTeX$ math code. --&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
