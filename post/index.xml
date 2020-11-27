@@ -14,9 +14,9 @@
     
     <item>
       <title>Adv. PyTorch: Configuring MS Visual Studio for Using PyToch C&#43;&#43; API in Windows</title>
-      <link>https://mrnabati.github.io/post/004_adv_pytorch_integrating_pytorch_cpp_frontend_in_visual_studio_on_windows/</link>
+      <link>https://mrnabati.github.io/2020/06/adv.-pytorch-configuring-ms-visual-studio-for-using-pytoch-c-api-in-windows/</link>
       <pubDate>Mon, 22 Jun 2020 20:17:31 -0400</pubDate>
-      <guid>https://mrnabati.github.io/post/004_adv_pytorch_integrating_pytorch_cpp_frontend_in_visual_studio_on_windows/</guid>
+      <guid>https://mrnabati.github.io/2020/06/adv.-pytorch-configuring-ms-visual-studio-for-using-pytoch-c-api-in-windows/</guid>
       <description>&lt;p&gt;This tutorial will walk you through the required steps to configure
 and use the PyTorch C++ API (LibTorch) in Microsoft Visual Studio. Although
 the recommended build system for LibTorch is CMake, you might find yourself in
@@ -134,9 +134,9 @@ test our setup, run the generated executable file. The output should be a
     
     <item>
       <title>Adv. PyTorch: Modifying the Last Layer</title>
-      <link>https://mrnabati.github.io/post/003_adv_pytorch_modifying_the_last_layer/</link>
+      <link>https://mrnabati.github.io/2020/06/adv.-pytorch-modifying-the-last-layer/</link>
       <pubDate>Sun, 21 Jun 2020 16:42:11 -0400</pubDate>
-      <guid>https://mrnabati.github.io/post/003_adv_pytorch_modifying_the_last_layer/</guid>
+      <guid>https://mrnabati.github.io/2020/06/adv.-pytorch-modifying-the-last-layer/</guid>
       <description>&lt;p&gt;All the pre-trained models provided in the &lt;code&gt;torchvision&lt;/code&gt; package in PyTorch are
 trained on the &lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;ImageNet&lt;/a&gt; dataset and can be used out
 of the box on this dataset. But often times you want to use these models on
@@ -201,9 +201,9 @@ parameters again.&lt;/p&gt;
     
     <item>
       <title>Adv. PyTorch: Freezing Layers</title>
-      <link>https://mrnabati.github.io/post/002_adv_pytorch_freezing_layers/</link>
+      <link>https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/</link>
       <pubDate>Fri, 22 May 2020 13:42:11 -0400</pubDate>
-      <guid>https://mrnabati.github.io/post/002_adv_pytorch_freezing_layers/</guid>
+      <guid>https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/</guid>
       <description>&lt;p&gt;If you&amp;rsquo;re planning to fine-tune a trained model on a different dataset, chances
 are you&amp;rsquo;re going to freeze some of the early layers and only update the later
 layers. I won&amp;rsquo;t go into the details of why you may want to freeze some layers
@@ -577,17 +577,17 @@ a Lambda function when constructing the optimizer:&lt;/p&gt;
     
     <item>
       <title>Enabling CAN on Nvidia Jetson Xavier Developer Kit</title>
-      <link>https://mrnabati.github.io/post/000_enabling_can_on_nvidia_jetson_xavier_developer_kit/</link>
+      <link>https://mrnabati.github.io/2018/11/enabling-can-on-nvidia-jetson-xavier-developer-kit/</link>
       <pubDate>Fri, 09 Nov 2018 20:28:20 +0000</pubDate>
-      <guid>https://mrnabati.github.io/post/000_enabling_can_on_nvidia_jetson_xavier_developer_kit/</guid>
+      <guid>https://mrnabati.github.io/2018/11/enabling-can-on-nvidia-jetson-xavier-developer-kit/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Installing NVMe SSD on Nvidia Jetson Xavier Developer Kit</title>
-      <link>https://mrnabati.github.io/post/001_installing_nvme_ssd_jetson_xavier/</link>
+      <link>https://mrnabati.github.io/2018/10/installing-nvme-ssd-on-nvidia-jetson-xavier-developer-kit/</link>
       <pubDate>Sat, 06 Oct 2018 22:23:28 +0000</pubDate>
-      <guid>https://mrnabati.github.io/post/001_installing_nvme_ssd_jetson_xavier/</guid>
+      <guid>https://mrnabati.github.io/2018/10/installing-nvme-ssd-on-nvidia-jetson-xavier-developer-kit/</guid>
       <description></description>
     </item>
     

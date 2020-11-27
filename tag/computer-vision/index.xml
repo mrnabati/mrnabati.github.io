@@ -14,9 +14,9 @@
     
     <item>
       <title>Spacenet 3: Road Network Detection</title>
-      <link>https://mrnabati.github.io/project/01_spacenet/</link>
+      <link>https://mrnabati.github.io/projects/spacenet/</link>
       <pubDate>Fri, 12 Jan 2018 19:47:25 -0400</pubDate>
-      <guid>https://mrnabati.github.io/project/01_spacenet/</guid>
+      <guid>https://mrnabati.github.io/projects/spacenet/</guid>
       <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
 &lt;p&gt;In this challenge, we were tasked with finding automated methods for extracting map-ready road networks from high-resolution satellite imagery. Moving towards more accurate fully automated extraction of road networks will help bring innovation to computer vision methodologies applied to high-resolution satellite imagery, and ultimately help create better maps where they are needed most. The goal is to extract navigable road networks that represent roads from satellite images.&lt;/p&gt;
 &lt;p&gt;While Pixel-level F1 score is a widely used segmentation evaluation metric, it is suboptimal for routing applications like road network detection. Because the F1 metric weights each pixel equally, a perfect score is only possible if all pixels are classified correctly as either road or background. With this metric, a brief break in an inferred road (caused for example by an overhanging tree) is lightly penalized while a slight error in road width is penalized heavily. This problem is illustrated in this figure:&lt;/p&gt;
@@ -50,7 +50,7 @@
 
   
   
-  &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; class=&#34;numbered&#34;&gt;
+  &lt;figcaption data-pre=&#34;Figure&amp;nbsp;&#34; data-post=&#34;:&amp;nbsp;&#34; class=&#34;numbered&#34;&gt;
     Left: Ground truth road mask in green. Middle: proposal mask in orange, Right: proposal mask in cyan. Credit: &lt;a href=&#34;https://medium.com/the-downlinq/spacenet-road-detection-and-routing-challenge-part-i-d4f59d55bfce&#34;&gt;Adam Van Etten&lt;/a&gt;
   &lt;/figcaption&gt;
 
@@ -91,7 +91,7 @@
 
   
   
-  &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; class=&#34;numbered&#34;&gt;
+  &lt;figcaption data-pre=&#34;Figure&amp;nbsp;&#34; data-post=&#34;:&amp;nbsp;&#34; class=&#34;numbered&#34;&gt;
     Binary road map.
   &lt;/figcaption&gt;
 
@@ -129,7 +129,7 @@
 
   
   
-  &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; class=&#34;numbered&#34;&gt;
+  &lt;figcaption data-pre=&#34;Figure&amp;nbsp;&#34; data-post=&#34;:&amp;nbsp;&#34; class=&#34;numbered&#34;&gt;
     Skeletonized road map.
   &lt;/figcaption&gt;
 

@@ -14,9 +14,9 @@
     
     <item>
       <title>Radar Region Proposal Network</title>
-      <link>https://mrnabati.github.io/project/04_rrpn/</link>
+      <link>https://mrnabati.github.io/projects/rrpn/</link>
       <pubDate>Sun, 10 May 2020 17:25:44 -0400</pubDate>
-      <guid>https://mrnabati.github.io/project/04_rrpn/</guid>
+      <guid>https://mrnabati.github.io/projects/rrpn/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Radar Region Proposal Network (RRPN) is a Radar-based real-time region proposal algorithm for object detection in autonomous driving vehicles. RRPN generates object
 proposals by mapping Radar detections to the image coordinate system and generating pre-defined anchor boxes for
@@ -269,9 +269,9 @@ bounding boxes in each image. The generated proposals for two radar detection po
     
     <item>
       <title>EcoCAR Mobility Challenge</title>
-      <link>https://mrnabati.github.io/project/03_ecocarmc/</link>
+      <link>https://mrnabati.github.io/projects/ecocar-mobility-challenge/</link>
       <pubDate>Thu, 22 Nov 2018 23:55:33 +0000</pubDate>
-      <guid>https://mrnabati.github.io/project/03_ecocarmc/</guid>
+      <guid>https://mrnabati.github.io/projects/ecocar-mobility-challenge/</guid>
       <description>&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://avtcseries.org/ecocar-mobility-challenge/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;EcoCAR Mobility Challenge&lt;/a&gt; is the newest U.S. Department of Energy (DOE) Advanced Vehicle Technology Competition (AVTC) series challenging 12 North American university teams. It is sponsored by DOE, General Motors and Mathworks and managed by Argonne National Laboratory. Teams have four years to redesign a 2019 Chevrolet Blazer and apply advanced propulsion systems, electrification, SAE Level 2 automation, and vehicle connectivity. Teams will use different sensors and wireless communication devices to design a perception system for the vehicle and deploy &lt;a href=&#34;https://en.wikipedia.org/wiki/Vehicle-to-everything&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;VehicleToX&lt;/a&gt; (V2X) communication to improve overall operation efficiency in the connected urban environment of the future.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.sae.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;The Society of Automotive Engineers&lt;/a&gt; (SAE) provides a taxonomy for six levels of driving automation, ranging from no driving automation (level 0) to full driving automation (level 5). SAE Level 2 automation refers to a vehicle with combined automated functions, like acceleration and steering, but the driver must remain engaged with the driving task and monitor the environment at all times.&lt;/p&gt;
@@ -371,9 +371,9 @@ a Chevrolet Camaro while driving on highway. It also displays the outputs of the
     
     <item>
       <title>EcoCAR 3</title>
-      <link>https://mrnabati.github.io/project/02_ecocar3/</link>
+      <link>https://mrnabati.github.io/projects/ecocar-3/</link>
       <pubDate>Thu, 21 Jun 2018 00:07:38 +0000</pubDate>
-      <guid>https://mrnabati.github.io/project/02_ecocar3/</guid>
+      <guid>https://mrnabati.github.io/projects/ecocar-3/</guid>
       <description>&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;http://ecocar3.org/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;EcoCAR 3&lt;/a&gt; is a U.S. Department of Energy (DOE) Advanced
 Vehicle Technology Competition (AVTC) series challenging 16 North American
@@ -416,7 +416,7 @@ control systems and are only allowed to provide passive feedback for drivers.&lt
 
   
   
-  &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; class=&#34;numbered&#34;&gt;
+  &lt;figcaption data-pre=&#34;Figure&amp;nbsp;&#34; data-post=&#34;:&amp;nbsp;&#34; class=&#34;numbered&#34;&gt;
     UTK ADAS Architecture
   &lt;/figcaption&gt;
 
@@ -463,7 +463,7 @@ detected object category, an object ID and also the relative distance of the obj
 
   
   
-  &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; class=&#34;numbered&#34;&gt;
+  &lt;figcaption data-pre=&#34;Figure&amp;nbsp;&#34; data-post=&#34;:&amp;nbsp;&#34; class=&#34;numbered&#34;&gt;
     Fusion Algorithm Output
   &lt;/figcaption&gt;
 

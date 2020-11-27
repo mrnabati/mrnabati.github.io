@@ -1,0 +1,1693 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+  
+  <meta name="generator" content="Wowchemy 5.0.0-beta.0 for Hugo">
+  
+
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Ramin Nabati">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="How to freeze layers of a pre-trained model in PyTorch.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/">
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#077180">
+  
+
+  
+  
+
+  
+  
+  
+  
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+
+    
+
+    
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.2.2/lazysizes.min.js" integrity="sha512-TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb+Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF/XjTUg==" crossorigin="anonymous" async></script>
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+        
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+    
+
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+    
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/wowchemy.css">
+
+  
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129495160-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+      dataLayer.push(arguments);
+  }
+
+  function trackOutboundLink(url, target) {
+    gtag('event', 'click', {
+         'event_category': 'outbound',
+         'event_label': url,
+         'transport_type': 'beacon',
+         'event_callback': function () {
+           if (target !== '_blank') {
+             document.location = url;
+           }
+         }
+    });
+    console.debug("Outbound link clicked: " + url);
+  }
+
+  function onClickCallback(event) {
+    if ((event.target.tagName !== 'A') || (event.target.host === window.location.host)) {
+      return;
+    }
+    trackOutboundLink(event.target, event.target.getAttribute('target'));  
+  }
+
+  gtag('js', new Date());
+  gtag('config', 'UA-129495160-1', {});
+
+  
+  document.addEventListener('click', onClickCallback, false);
+</script>
+
+
+  
+
+  
+
+
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_32x32_fill_lanczos_center_2.png">
+  <link rel="apple-touch-icon" type="image/png" href="/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png">
+
+  <link rel="canonical" href="https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/">
+
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@RaminNabati">
+  <meta property="twitter:creator" content="@RaminNabati">
+  
+  <meta property="og:site_name" content="Ramin&#39;s Homepage">
+  <meta property="og:url" content="https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/">
+  <meta property="og:title" content="Adv. PyTorch: Freezing Layers | Ramin&#39;s Homepage">
+  <meta property="og:description" content="How to freeze layers of a pre-trained model in PyTorch."><meta property="og:image" content="https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/featured.jpg">
+  <meta property="twitter:image" content="https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/featured.jpg"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2020-05-22T13:42:11-04:00">
+    
+    <meta property="article:modified_time" content="2020-05-22T13:42:11-04:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/"
+  },
+  "headline": "Adv. PyTorch: Freezing Layers",
+  
+  "image": [
+    "https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/featured.jpg"
+  ],
+  
+  "datePublished": "2020-05-22T13:42:11-04:00",
+  "dateModified": "2020-05-22T13:42:11-04:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Ramin Nabati"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ramin's Homepage",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mrnabati.github.io/images/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_192x192_fill_lanczos_center_2.png"
+    }
+  },
+  "description": "How to freeze layers of a pre-trained model in PyTorch."
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>Adv. PyTorch: Freezing Layers | Ramin&#39;s Homepage</title>
+
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper  ">
+
+  
+  
+  
+  
+  
+  <script src="/js/wowchemy-init.js"></script>
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="/">Ramin&#39;s Homepage</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="/">Ramin&#39;s Homepage</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#experience"><span>Experience</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#accomplishments"><span>Awards</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#publications"><span>Publications</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/post"><span>Blog Posts</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    
+          <article class="article">
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Adv. PyTorch: Freezing Layers</h1>
+
+  
+
+  
+
+<div id="code-folding-buttons" class="dropdown btn-group pull-right">
+  <a class="btn btn-light btn-sm dropdown-toggle" href="#" role="button" id="allCodeToggleButton"
+     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Code
+  </a>
+  <div class="dropdown-menu" aria-labelledby="allCodeToggleButton">
+    <a id="rmd-show-all-code" class="dropdown-item small" href="#">Show all</a>
+    <a id="rmd-hide-all-code" class="dropdown-item small" href="#">Hide all</a>
+  </div>
+</div>
+
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+  
+  <span ><a href="/author/ramin-nabati/">Ramin Nabati</a></span>
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    May 22, 2020
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  <span class="middot-divider"></span>
+  <a href="/2020/05/adv.-pytorch-freezing-layers/#disqus_thread"></a>
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <a class="btn btn-outline-primary my-1 mr-1" href="https://gist.github.com/mrnabati/275aa79bc1810af9f137659b685bdef5" target="_blank" rel="noopener">
+    <i class="fab fa-github mr-1"></i>
+    Code on GitHub
+  </a>
+
+
+</div>
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 405px;">
+  <div style="position: relative">
+    <img src="/2020/05/adv.-pytorch-freezing-layers/featured_hu8eb7c229af61884ce2d2472c130535f7_133837_720x0_resize_q90_lanczos.jpg" alt="" class="featured-image">
+    <span class="article-header-caption">Credit: Anastasia Gruzdeva</span>
+  </div>
+</div>
+
+          <div class="article-container">
+            <div class="article-style">
+              <p>If you&rsquo;re planning to fine-tune a trained model on a different dataset, chances
+are you&rsquo;re going to freeze some of the early layers and only update the later
+layers. I won&rsquo;t go into the details of why you may want to freeze some layers
+and which ones should be frozen, but I&rsquo;ll show you how to do it in PyTorch.
+Let&rsquo;s get started!</p>
+<p>We first need a pre-trained model to start with. The
+<a href="https://pytorch.org/docs/stable/torchvision/models.html" target="_blank" rel="noopener">models subpackage</a> in
+the <code>torchvision</code> package provides definitions for many of the poplular model
+architectures for image classification. You can construct these models by simply
+calling their constructor, which would initialize the model with random weights.
+To use the pre-trained models from the PyTorch Model Zoo, you can call the
+constructor with the <code>pretrained=True</code> argument. Let&rsquo;s load the pretrained
+VGG16 model:</p>
+<pre><code class="language-python">import torch
+import torch.nn as nn
+import torchvision.models as models
+
+vgg16 = models.vgg16(pretrained=True)
+</code></pre>
+<p>This will start downloading the pretrained model into your computer&rsquo;s PyTorch
+cache folder, which usually is the <code>.cache/torch/checkpoints</code> folder under your
+home directory.</p>
+<p>There are multiple ways you can look into the model to see its modules and
+layers. One way is using the <code>.modules()</code> member function, which returns in
+iterator containing all the member objects of the model. The <code>.modules()</code>
+functions recursively goes thruogh all the modules and submodules of the model:</p>
+<pre><code class="language-python">print(list(vgg16.modules()))
+</code></pre>
+<pre><code>[VGG(
+  (features): Sequential(
+    (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): ReLU(inplace=True)
+    (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (3): ReLU(inplace=True)
+    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): ReLU(inplace=True)
+    (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (8): ReLU(inplace=True)
+    (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): ReLU(inplace=True)
+    (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): ReLU(inplace=True)
+    (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (15): ReLU(inplace=True)
+    (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (18): ReLU(inplace=True)
+    (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (20): ReLU(inplace=True)
+    (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (22): ReLU(inplace=True)
+    (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (25): ReLU(inplace=True)
+    (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (27): ReLU(inplace=True)
+    (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (29): ReLU(inplace=True)
+    (30): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))
+  (classifier): Sequential(
+    (0): Linear(in_features=25088, out_features=4096, bias=True)
+    (1): ReLU(inplace=True)
+    (2): Dropout(p=0.5, inplace=False)
+    (3): Linear(in_features=4096, out_features=4096, bias=True)
+    (4): ReLU(inplace=True)
+    (5): Dropout(p=0.5, inplace=False)
+    (6): Linear(in_features=4096, out_features=1000, bias=True)
+  )
+), Sequential(
+  (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (1): ReLU(inplace=True)
+  (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (3): ReLU(inplace=True)
+  (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (6): ReLU(inplace=True)
+  (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (8): ReLU(inplace=True)
+  (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (11): ReLU(inplace=True)
+  (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (13): ReLU(inplace=True)
+  (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (15): ReLU(inplace=True)
+  (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (18): ReLU(inplace=True)
+  (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (20): ReLU(inplace=True)
+  (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (22): ReLU(inplace=True)
+  (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (25): ReLU(inplace=True)
+  (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (27): ReLU(inplace=True)
+  (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (29): ReLU(inplace=True)
+  (30): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+), Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1)), ReLU(inplace=True), MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False), AdaptiveAvgPool2d(output_size=(7, 7)), Sequential(
+  (0): Linear(in_features=25088, out_features=4096, bias=True)
+  (1): ReLU(inplace=True)
+  (2): Dropout(p=0.5, inplace=False)
+  (3): Linear(in_features=4096, out_features=4096, bias=True)
+  (4): ReLU(inplace=True)
+  (5): Dropout(p=0.5, inplace=False)
+  (6): Linear(in_features=4096, out_features=1000, bias=True)
+), Linear(in_features=25088, out_features=4096, bias=True), ReLU(inplace=True), Dropout(p=0.5, inplace=False), Linear(in_features=4096, out_features=4096, bias=True), ReLU(inplace=True), Dropout(p=0.5, inplace=False), Linear(in_features=4096, out_features=1000, bias=True)]
+</code></pre>
+<p>That&rsquo;s a lot of information spewed out onto the screen! Let&rsquo;s use the
+<code>.named_module()</code> function instead, which returns a (name, module) tuple and
+only print the names:</p>
+<pre><code class="language-python">for (name, module) in vgg16.named_modules():
+    print(name)
+</code></pre>
+<pre><code>features
+features.0
+features.1
+features.2
+features.3
+features.4
+features.5
+features.6
+features.7
+features.8
+features.9
+features.10
+features.11
+features.12
+features.13
+features.14
+features.15
+features.16
+features.17
+features.18
+features.19
+features.20
+features.21
+features.22
+features.23
+features.24
+features.25
+features.26
+features.27
+features.28
+features.29
+features.30
+avgpool
+classifier
+classifier.0
+classifier.1
+classifier.2
+classifier.3
+classifier.4
+classifier.5
+classifier.6
+</code></pre>
+<p>That&rsquo;s much better! We can see the top level modules are <em>features</em>, <em>avgpool</em>
+and <em>classifier</em>. We can also see that the <em>features</em> and <em>calssifier</em> modules
+consist of 31 and 7 layers respectively. These layers are not named, and only
+have numbers associated with them. If you want to see an even more concise
+representation of the network, you can use the <code>.named_children()</code> function
+which does not go inside the top level modules recursively:</p>
+<pre><code class="language-python">for (name, module) in vgg16.named_children():
+    print(name)
+</code></pre>
+<pre><code>features
+avgpool
+classifier
+</code></pre>
+<p>Now let&rsquo;s see what layers are there under the <em>features</em> module. Here we use the
+<code>.children()</code> function to get the layers under the <em>features</em> module, since
+these layers are not &lsquo;named&rsquo;:</p>
+<pre><code class="language-python">for (name, module) in vgg16.named_children():
+    if name == 'features':
+        for layer in module.children():
+            print(layer)
+</code></pre>
+<pre><code>Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+ReLU(inplace=True)
+MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+</code></pre>
+<p>We can even go deeper and look at the parameters in each layer. Let&rsquo;s get the
+parameters of the first layer under the <em>features</em> module:</p>
+<pre><code class="language-python">for (name, module) in vgg16.named_children():
+    if name == 'features':
+        for layer in module.children():
+            for param in layer.parameters():
+                print(param)
+            break
+</code></pre>
+<pre><code>Parameter containing:
+tensor([[[[-5.5373e-01,  1.4270e-01,  5.2896e-01],
+          [-5.8312e-01,  3.5655e-01,  7.6566e-01],
+          [-6.9022e-01, -4.8019e-02,  4.8409e-01]],
+
+         [[ 1.7548e-01,  9.8630e-03, -8.1413e-02],
+          [ 4.4089e-02, -7.0323e-02, -2.6035e-01],
+          [ 1.3239e-01, -1.7279e-01, -1.3226e-01]],
+
+         [[ 3.1303e-01, -1.6591e-01, -4.2752e-01],
+          [ 4.7519e-01, -8.2677e-02, -4.8700e-01],
+          [ 6.3203e-01,  1.9308e-02, -2.7753e-01]]],
+
+
+        [[[ 2.3254e-01,  1.2666e-01,  1.8605e-01],
+          [-4.2805e-01, -2.4349e-01,  2.4628e-01],
+          [-2.5066e-01,  1.4177e-01, -5.4864e-03]],
+
+         [[-1.4076e-01, -2.1903e-01,  1.5041e-01],
+          [-8.4127e-01, -3.5176e-01,  5.6398e-01],
+          [-2.4194e-01,  5.1928e-01,  5.3915e-01]],
+
+         [[-3.1432e-01, -3.7048e-01, -1.3094e-01],
+          [-4.7144e-01, -1.5503e-01,  3.4589e-01],
+          [ 5.4384e-02,  5.8683e-01,  4.9580e-01]]],
+
+
+        [[[ 1.7715e-01,  5.2149e-01,  9.8740e-03],
+          [-2.7185e-01, -7.1709e-01,  3.1292e-01],
+          [-7.5753e-02, -2.2079e-01,  3.3455e-01]],
+
+         [[ 3.0924e-01,  6.7071e-01,  2.0546e-02],
+          [-4.6607e-01, -1.0697e+00,  3.3501e-01],
+          [-8.0284e-02, -3.0522e-01,  5.4460e-01]],
+
+         [[ 3.1572e-01,  4.2335e-01, -3.4976e-01],
+          [ 8.6354e-02, -4.6457e-01,  1.1803e-02],
+          [ 1.0483e-01, -1.4584e-01, -1.5765e-02]]],
+
+
+        ...,
+
+
+        [[[ 7.7599e-02,  1.2692e-01,  3.2305e-02],
+          [ 2.2131e-01,  2.4681e-01, -4.6637e-02],
+          [ 4.6407e-02,  2.8246e-02,  1.7528e-02]],
+
+         [[-1.8327e-01, -6.7425e-02, -7.2120e-03],
+          [-4.8855e-02,  7.0427e-03, -1.2883e-01],
+          [-6.4601e-02, -6.4566e-02,  4.4235e-02]],
+
+         [[-2.2547e-01, -1.1931e-01, -2.3425e-02],
+          [-9.9171e-02, -1.5143e-02,  9.5385e-04],
+          [-2.6137e-02,  1.3567e-03,  1.4282e-01]]],
+
+
+        [[[ 1.6520e-02, -3.2225e-02, -3.8450e-03],
+          [-6.8206e-02, -1.9445e-01, -1.4166e-01],
+          [-6.9528e-02, -1.8340e-01, -1.7422e-01]],
+
+         [[ 4.2781e-02, -6.7529e-02, -7.0309e-03],
+          [ 1.1765e-02, -1.4958e-01, -1.2361e-01],
+          [ 1.0205e-02, -1.0393e-01, -1.1742e-01]],
+
+         [[ 1.2661e-01,  8.5046e-02,  1.3066e-01],
+          [ 1.7585e-01,  1.1288e-01,  1.1937e-01],
+          [ 1.4656e-01,  9.8892e-02,  1.0348e-01]]],
+
+
+        [[[ 3.2176e-02, -1.0766e-01, -2.6388e-01],
+          [ 2.7957e-01, -3.7416e-02, -2.5471e-01],
+          [ 3.4872e-01,  3.0041e-02, -5.5898e-02]],
+
+         [[ 2.5063e-01,  1.5543e-01, -1.7432e-01],
+          [ 3.9255e-01,  3.2306e-02, -3.5191e-01],
+          [ 1.9299e-01, -1.9898e-01, -2.9713e-01]],
+
+         [[ 4.6032e-01,  4.3399e-01,  2.8352e-01],
+          [ 1.6341e-01, -5.8165e-02, -1.9196e-01],
+          [-1.9521e-01, -4.5630e-01, -4.2732e-01]]]], requires_grad=True)
+Parameter containing:
+tensor([ 0.4034,  0.3778,  0.4644, -0.3228,  0.3940, -0.3953,  0.3951, -0.5496,
+         0.2693, -0.7602, -0.3508,  0.2334, -1.3239, -0.1694,  0.3938, -0.1026,
+         0.0460, -0.6995,  0.1549,  0.5628,  0.3011,  0.3425,  0.1073,  0.4651,
+         0.1295,  0.0788, -0.0492, -0.5638,  0.1465, -0.3890, -0.0715,  0.0649,
+         0.2768,  0.3279,  0.5682, -1.2640, -0.8368, -0.9485,  0.1358,  0.2727,
+         0.1841, -0.5325,  0.3507, -0.0827, -1.0248, -0.6912, -0.7711,  0.2612,
+         0.4033, -0.4802, -0.3066,  0.5807, -1.3325,  0.4844, -0.8160,  0.2386,
+         0.2300,  0.4979,  0.5553,  0.5230, -0.2182,  0.0117, -0.5516,  0.2108],
+       requires_grad=True)
+</code></pre>
+<p>Now that we have access to all the modules, layers and their parameters, we can
+easily freeze them by setting the parameters' <code>requires_grad</code> flag to <code>False</code>.
+This would prevent calculating the gradients for these parameters in the
+<code>backward</code> step which in turn prevents the optimizer from updating them.</p>
+<p>Now let&rsquo;s freeze all the parameters in the <em>features</em> module:</p>
+<pre><code class="language-python">layer_counter = 0
+for (name, module) in vgg16.named_children():
+    if name == 'features':
+        for layer in module.children():
+            for param in layer.parameters():
+                param.requires_grad = False
+            
+            print('Layer &quot;{}&quot; in module &quot;{}&quot; was frozen!'.format(layer_counter, name))
+            layer_counter+=1
+</code></pre>
+<pre><code>Layer &quot;0&quot; in module &quot;features&quot; was frozen!
+Layer &quot;1&quot; in module &quot;features&quot; was frozen!
+Layer &quot;2&quot; in module &quot;features&quot; was frozen!
+Layer &quot;3&quot; in module &quot;features&quot; was frozen!
+Layer &quot;4&quot; in module &quot;features&quot; was frozen!
+Layer &quot;5&quot; in module &quot;features&quot; was frozen!
+Layer &quot;6&quot; in module &quot;features&quot; was frozen!
+Layer &quot;7&quot; in module &quot;features&quot; was frozen!
+Layer &quot;8&quot; in module &quot;features&quot; was frozen!
+Layer &quot;9&quot; in module &quot;features&quot; was frozen!
+Layer &quot;10&quot; in module &quot;features&quot; was frozen!
+Layer &quot;11&quot; in module &quot;features&quot; was frozen!
+Layer &quot;12&quot; in module &quot;features&quot; was frozen!
+Layer &quot;13&quot; in module &quot;features&quot; was frozen!
+Layer &quot;14&quot; in module &quot;features&quot; was frozen!
+Layer &quot;15&quot; in module &quot;features&quot; was frozen!
+Layer &quot;16&quot; in module &quot;features&quot; was frozen!
+Layer &quot;17&quot; in module &quot;features&quot; was frozen!
+Layer &quot;18&quot; in module &quot;features&quot; was frozen!
+Layer &quot;19&quot; in module &quot;features&quot; was frozen!
+Layer &quot;20&quot; in module &quot;features&quot; was frozen!
+Layer &quot;21&quot; in module &quot;features&quot; was frozen!
+Layer &quot;22&quot; in module &quot;features&quot; was frozen!
+Layer &quot;23&quot; in module &quot;features&quot; was frozen!
+Layer &quot;24&quot; in module &quot;features&quot; was frozen!
+Layer &quot;25&quot; in module &quot;features&quot; was frozen!
+Layer &quot;26&quot; in module &quot;features&quot; was frozen!
+Layer &quot;27&quot; in module &quot;features&quot; was frozen!
+Layer &quot;28&quot; in module &quot;features&quot; was frozen!
+Layer &quot;29&quot; in module &quot;features&quot; was frozen!
+Layer &quot;30&quot; in module &quot;features&quot; was frozen!
+</code></pre>
+<p>Now that some of the parameters are frozen, the optimizer needs to be modified
+to only get the parameters with <code>requires_grad=True</code>. We can do this by writing
+a Lambda function when constructing the optimizer:</p>
+<pre><code class="language-python">optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, vgg16.parameters()), lr=0.001)
+</code></pre>
+<p>You can now start training your partially frozen model!</p>
+
+            </div>
+              
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tag/pytorch/">PyTorch</a>
+  
+  <a class="badge badge-light" href="/tag/deep-learning/">Deep Learning</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/&amp;text=Adv.%20PyTorch:%20Freezing%20Layers" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/&amp;t=Adv.%20PyTorch:%20Freezing%20Layers" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=Adv.%20PyTorch:%20Freezing%20Layers&amp;body=https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/&amp;title=Adv.%20PyTorch:%20Freezing%20Layers" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="whatsapp://send?text=Adv.%20PyTorch:%20Freezing%20Layers%20https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="https://mrnabati.github.io/"><img class="avatar mr-3 avatar-circle" src="/author/ramin-nabati/avatar_hu577c375f84fd7495871e597685ecc2ca_406533_270x270_fill_lanczos_center_2.png" alt="Ramin Nabati"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://mrnabati.github.io/">Ramin Nabati</a></h5>
+      <h6 class="card-subtitle">Connected and Automated Vehicles (CAV) Team Lead</h6>
+      
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/ramin-nabati" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/mrnabati" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/RaminNabati" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+<section id="comments">
+  
+    
+<div id="disqus_thread"></div>
+<script>
+  var disqus_config = function () {
+    
+    
+    
+  };
+  (function() {
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+      return;
+    }
+    var d = document, s = d.createElement('script'); s.async = true;
+    s.src = 'https://' + "mrnabati" + '.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  
+</section>
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+            </div>
+              </article>
+              
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    © 2020 Ramin Nabati
+  </p>
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+    Published with
+    <a href="https://wowchemy.com" target="_blank" rel="noopener">Wowchemy</a>  —
+    the free, <a href="https://github.com/wowchemy/wowchemy-hugo-modules" target="_blank" rel="noopener">
+    open source</a> website builder that empowers creators.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+      
+
+    
+
+    
+    
+
+    
+    
+    <script>const code_highlighting = true;</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks",
+        'slides' : "Slides"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    <script id="dsq-count-scr" src="https://mrnabati.disqus.com/count.js" async></script>
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/wowchemy.min.59419d2c9809de125013c581da371866.js"></script>
+
+    
+
+
+
+
+
+
+</body>
+</html>

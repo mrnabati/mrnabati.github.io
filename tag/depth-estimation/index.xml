@@ -14,9 +14,9 @@
     
     <item>
       <title>Radar-Camera Sensor Fusion and Depth Estimation</title>
-      <link>https://mrnabati.github.io/project/05_radar_camera_fusion/</link>
+      <link>https://mrnabati.github.io/projects/radar-camera-sensor-fusion/</link>
       <pubDate>Wed, 14 Oct 2020 21:08:24 -0500</pubDate>
-      <guid>https://mrnabati.github.io/project/05_radar_camera_fusion/</guid>
+      <guid>https://mrnabati.github.io/projects/radar-camera-sensor-fusion/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;In this project, we designed and implemented a radar-camera fusion algorithm for joint object detection and distance estimation in
 autonomous driving applications. The proposed method is
