@@ -1,224 +1,136 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://mrnabati.github.io/projects/centerfusion/</loc>
     <lastmod>2020-11-15T11:01:13-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/</loc>
     <lastmod>2020-11-15T11:01:13-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication-type/1/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/authors/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/autonomous-vehicles/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication/03_centerfusion/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/hairong-qi/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/object-detection/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication_types/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/ramin-nabati/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/sensor-fusion/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tags/</loc>
     <lastmod>2020-11-12T23:29:22-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/depth-estimation/</loc>
     <lastmod>2020-10-14T21:08:24-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/projects/radar-camera-sensor-fusion/</loc>
     <lastmod>2020-10-14T21:08:24-05:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/2020/06/adv.-pytorch-configuring-ms-visual-studio-for-using-pytoch-c-api-in-windows/</loc>
     <lastmod>2020-06-22T20:17:31-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/deep-learning/</loc>
     <lastmod>2020-06-22T20:17:31-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/pytorch/</loc>
     <lastmod>2020-06-22T20:17:31-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/2020/06/adv.-pytorch-modifying-the-last-layer/</loc>
     <lastmod>2020-06-21T16:42:11-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/2020/05/adv.-pytorch-freezing-layers/</loc>
     <lastmod>2020-05-22T13:42:11-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/adas/</loc>
     <lastmod>2020-05-10T17:25:44-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/autonomous-driving/</loc>
     <lastmod>2020-05-10T17:25:44-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/projects/rrpn/</loc>
     <lastmod>2020-05-10T17:25:44-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication-type/3/</loc>
     <lastmod>2020-05-09T16:26:42-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication/02_radar-camera-sensor-fusion-for-joint-object-detection-and-distance-estimation-in-autonomous-vehicles/</loc>
     <lastmod>2020-05-09T16:26:42-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication/00_rrpn-adar-region-proposal-network-for-object-detection-in-autonomous-vehicles/</loc>
     <lastmod>2019-05-02T23:35:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/audris-mockus/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/dawnie-steadman/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/forensic-imagery/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/publication/01_machine-assisted-annotation-of-forensic-imagery/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/megan-kleeschulte/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/author/sara-mousavi/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/semantic-segmentation/</loc>
     <lastmod>2019-05-01T23:37:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/post/</loc>
     <lastmod>2019-01-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/projects/ecocar-mobility-challenge/</loc>
     <lastmod>2018-11-22T23:55:33+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/project/</loc>
     <lastmod>2018-11-21T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/2018/11/enabling-can-on-nvidia-jetson-xavier-developer-kit/</loc>
     <lastmod>2020-05-22T13:42:11-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/2018/10/installing-nvme-ssd-on-nvidia-jetson-xavier-developer-kit/</loc>
     <lastmod>2018-10-06T22:23:28+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/projects/ecocar-3/</loc>
     <lastmod>2018-06-21T00:07:38+00:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/computer-vision/</loc>
     <lastmod>2018-01-12T19:47:25-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/image-segmentation/</loc>
     <lastmod>2018-01-12T19:47:25-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/tag/pattern-recognition/</loc>
     <lastmod>2018-01-12T19:47:25-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/projects/spacenet/</loc>
     <lastmod>2018-01-12T19:47:25-04:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://mrnabati.github.io/categories/</loc>
   </url>
-  
 </urlset>
