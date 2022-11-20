@@ -1,0 +1,143 @@
+<!doctype html><html><head><title>CenterFusion</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=x-ua-compatible content="ie=edge"><link rel=stylesheet href=/css/bootstrap.min.css><link rel=stylesheet href=/css/layouts/main.css><link rel=stylesheet href=/css/navigators/navbar.css><link rel=stylesheet href=/css/plyr.css><link rel=stylesheet href=/css/flag-icon.min.css><link rel=stylesheet href=/google-fonts/Mulish/mulish.css><link rel=stylesheet href=/fontawesome/css/all.min.css><link rel=stylesheet href=/css/colortheme/colortheme.css><link rel=icon type=image/png href=/images/site/favicon_hu577c375f84fd7495871e597685ecc2ca_406533_42x0_resize_box_3.png><meta property="og:title" content="CenterFusion"><meta property="og:description" content="A center-based radar and camera fusion for 3D object detection in autonomous vehicles."><meta property="og:type" content="article"><meta property="og:url" content="https://mrnabati.github.io/posts/projects/06_centerfusion/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-05-10T17:25:44-04:00"><meta property="article:modified_time" content="2020-05-10T17:25:44-04:00"><meta name=description content="CenterFusion"><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/atom-one-dark.min.css><link rel=stylesheet href=/css/layouts/single.css><link rel=stylesheet href=/css/navigators/sidebar.css><link rel=stylesheet href=/css/style.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)}(window,document,"script","https://www.google-analytics.com/analytics.js","ga"),ga("create","UA-129495160-1","auto"),ga("send","pageview"))</script></head><body data-spy=scroll data-target=#TableOfContents data-offset=80><div class="container-fluid bg-dimmed wrapper"><nav class="navbar navbar-expand-xl top-navbar final-navbar shadow"><div class=container><button class="navbar-toggler navbar-light" id=sidebar-toggler type=button onclick=toggleSidebar()>
+<span class=navbar-toggler-icon></span></button>
+<a class=navbar-brand href=/><img src=/images/site/main-logo_hu577c375f84fd7495871e597685ecc2ca_406533_42x0_resize_box_3.png alt=Logo>
+Ramin's Homepage</a>
+<button class="navbar-toggler navbar-light" id=toc-toggler type=button onclick=toggleTOC()>
+<span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse lang-selector" id=top-nav-items><ul class="navbar-nav ml-auto"><li class="nav-item dropdown"><div id=theme-initialization style=display:none default-theme=system></div><a class="nav-link dropdown-toggle" href=# id=themeSelector role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false><img id=navbar-theme-icon-svg src=/icons/moon-svgrepo-com.svg width=20 alt="Dark Theme"></a><div class="dropdown-menu dropdown-menu-icons-only" aria-labelledby=themeSelector><a class="dropdown-item nav-link" href=# onclick=enableLightTheme()><img class=menu-icon-center src=/icons/sun-svgrepo-com.svg width=20 alt="Light Theme"></a>
+<a class="dropdown-item nav-link" href=# onclick=enableDarkTheme()><img class=menu-icon-center src=/icons/moon-svgrepo-com.svg width=20 alt="Dark Theme"></a>
+<a class="dropdown-item nav-link" href=# onclick=useSystemTheme()><img class=menu-icon-center src=/icons/computer-svgrepo-com.svg width=20 alt="System Theme"></a></div></li></ul></div></div><img src=/images/site/main-logo_hu577c375f84fd7495871e597685ecc2ca_406533_42x0_resize_box_3.png class=d-none id=main-logo alt=Logo>
+<img src=/images/site/inverted-logo_hu577c375f84fd7495871e597685ecc2ca_406533_42x0_resize_box_3.png class=d-none id=inverted-logo alt="Inverted Logo"></nav><section class=sidebar-section id=sidebar-section><div class=sidebar-holder><div class=sidebar id=sidebar><form class=mx-auto method=get action=/search><input type=text name=keyword placeholder=Search data-search id=search-box></form><div class=sidebar-tree><ul class=tree id=tree><li id=list-heading><a href=/posts data-filter=all>Posts</a></li><div class=subtree><li><i class="fas fa-minus-circle"></i><a class=active href=/posts/projects/>Projects</a><ul class=active><li><a href=/posts/projects/00_fmow/ title=fMoW>fMoW</a></li><li><a href=/posts/projects/01_spacenet/ title=SpaceNet3>SpaceNet3</a></li><li><a href=/posts/projects/02_ecocar3/ title=EcoCAR3>EcoCAR3</a></li><li><a href=/posts/projects/03_ecocarmc/ title="EcoCAR Mobility Challenge">EcoCAR Mobility Challenge</a></li><li><a href=/posts/projects/04_rrpn/ title=RRPN>RRPN</a></li><li><a href=/posts/projects/05_radar_camera_fusion/ title=RCSF>RCSF</a></li><li><a class=active href=/posts/projects/06_centerfusion/ title=CenterFusion>CenterFusion</a></li></ul></li><li><a href=https://medium.com/@ramin.nabati/installing-an-nvme-ssd-drive-on-nvidia-jetson-xavier-37183c948978 title="NVMe SSD on Nvidia Jetson Xavier">NVMe SSD on Nvidia Jetson Xavier</a></li><li><a href=https://medium.com/@ramin.nabati/enabling-can-on-nvidia-jetson-xavier-developer-kit-aaaa3c4d99c9 title="Enable CAN on Nvidia Jetson Xavier">Enable CAN on Nvidia Jetson Xavier</a></li><li><a href=/posts/002_adv_pytorch_freezing_layers/ title="Pytorch: Freezing Layers">Pytorch: Freezing Layers</a></li><li><a href=/posts/003_adv_pytorch_modifying_the_last_layer/ title="Pytorch: Modifying Layers">Pytorch: Modifying Layers</a></li><li><a href=/posts/004_adv_pytorch_integrating_pytorch_cpp_frontend_in_visual_studio_on_windows/ title="Pytorch: C++ API">Pytorch: C++ API</a></li></div></ul></div></div></div></section><section class=content-section id=content-section><div class=content><div class="container p-0 read-area"><div class="hero-area col-sm-12" id=hero-area style=background-image:url(/posts/projects/06_centerfusion/images/featured.png)></div><div class=page-content><div class="author-profile ml-auto align-self-lg-center"><img class=rounded-circle src=/images/author/ramin_hu577c375f84fd7495871e597685ecc2ca_406533_120x120_fit_box_3.png alt="Author Image"><h5 class=author-name>Ramin Nabati</h5><p>Sunday, May 10, 2020</p></div><div class=title><h1>CenterFusion</h1></div><div class=taxonomy-terms><ul style=padding-left:0><li class=rounded><a href=/tags/autonomous-driving class="btn, btn-sm">Autonomous Driving</a></li><li class=rounded><a href=/tags/sensor-fusion class="btn, btn-sm">Sensor Fusion</a></li><li class=rounded><a href=/tags/object-detection class="btn, btn-sm">Object Detection</a></li></ul></div><div class=post-content id=post-content><h2 id=introduction>Introduction</h2><p>The perception system in autonomous vehicles is responsible for detecting and
+tracking the surrounding objects. This is usually done by taking advantage of
+several sensing modalities to increase robustness and accuracy, which makes sensor
+fusion a crucial part of the perception system. In this paper, we focus on the
+problem of radar and camera sensor fusion and propose a middle-fusion approach
+to exploit both radar and camera data for 3D object detection. Our approach,
+called CenterFusion, first uses a center point detection network to detect objects
+by identifying their center points on the image. It then solves the key data
+association problem using a novel frustum-based method to associate the radar
+detections to their corresponding object’s center point. The associated radar
+detections are used to generate radar-based feature maps to complement the image
+features, and regress to object properties such as depth, rotation and velocity.</p><h2 id=our-approach>Our Approach</h2><p>We propose CenterFusion, a middle-fusion approach to exploit radar and camera
+data for 3D object detection. CenterFusion focuses on associating radar
+detections to preliminary detection results obtained from the image, then generates
+radar feature maps and uses it in addition to image features to accurately estimate
+3D bounding boxes for objects. Particularly, we generate preliminary 3D detections
+using a key point detection network, and propose a novel frustum-based radar
+association method to accurately associate radar detections to their corresponding
+objects in the 3D space. These radar detections are then mapped to the
+image plane and used to create feature maps to complement
+the image-based features. Finally, the fused features are
+used to accurately estimate objects’ 3D properties such as
+depth, rotation and velocity. The network architecture for
+CenterFusion is shown in the figure below.</p><figure><img src=./images/architecture.jpg><figcaption><h4>CenterFusion network architecture</h4></figcaption></figure><h3 id=center-point-detection>Center Point Detection</h3><p>We adopt the <a href=https://arxiv.org/abs/1904.07850>CenterNet</a> detection network for generating preliminary detections on the image. The image features are first extracted using a fully convolutional encoder-decoder backbone network. We follow <a href=https://arxiv.org/abs/1904.07850>CenterNet</a>
+and use a modified version of the <a href=https://arxiv.org/abs/1707.06484>Deep Layer Aggregation</a>
+(DLA) network as the backbone. The extracted image
+features are then used to predict object center points on the
+image, as well as the object 2D size (width and height), center offset, 3D dimensions, depth and rotation. These values
+are predicted by the primary regression heads as shown in
+the network architecture figure. Each primary regression head consists of a 3×3
+convolution layer with 256 channels and a 1×1 convolutional layer to generate the desired output. This provides
+an accurate 2D bounding box as well as a preliminary 3D
+bounding box for every detected object in the scene.</p><h3 id=radar-association>Radar Association</h3><p>The center point detection network only uses the image
+features at the center of each object to regress to all other
+object properties. To fully exploit radar data in this process, we first need to associate the radar detections to their
+corresponding object on the image plane. To accomplish
+this, a naive approach would be mapping each radar detection point to the image plane and associating it to an object
+if the point is mapped inside the 2D bounding box of that
+object. This is not a very robust solution, as there is not a
+one-to-one mapping between radar detections and objects
+in the image; Many objects in the scene generate multiple
+radar detections, and there are also radar detections that do
+not correspond to any object. Additionally, because the z
+dimension of the radar detection is not accurate (or does
+not exist at all), the mapped radar detection might end up
+outside the 2D bounding box of its corresponding object.
+Finally, radar detections obtained from occluded objects
+would map to the same general area in the image, which
+makes differentiating them in the 2D image plane difficult,
+if possible at all.</p><p>We develop a frustum association method that uses the object’s 2D bounding
+box as well as its estimated depth and size to create a 3D
+Region of Interest (RoI) frustum for the object. Having an
+accurate 2D bounding box for an object, we create a frustum for that object as shown in the figure below. This significantly
+narrows down the radar detections that need to be checked
+for association, as any point outside this frustum can be ignored. We then use the
+estimated object depth, dimension
+and rotation to create a RoI around the object, to further
+filter out radar detections that are not associated with this
+object. If there are multiple radar detections inside this RoI,
+we take the closest point as the radar detection corresponding to this object.</p><figure><img src=./images/frustum.jpg><figcaption><h4>Frustum association. An object detected using the image features (left), generating the ROI frustum based on object's 3D bounding box (middle), and the BEV of the ROI frustum showing radar detections inside the frustum (right). $\delta$ is used to increase the frustum size in the testing phase. $\hat{d}$ is the ground truth depth in the training phase and the estimated object depth in the testing phase.</h4></figcaption></figure><p>The RoI frustum approach makes associating overlapping objects effortless, as objects are separated in the 3D
+space and would have separate RoI frustums. It also eliminates the multi-detection association problem, as only the
+closest radar detection inside the RoI frustum is associated
+to the object. It does not, however, help with the inaccurate
+z dimension problem, as radar detections might be outside
+the ROI frustum of their corresponding object due to their
+inaccurate height information.</p><p>To address the inaccurate height information problem, we introduce a radar point cloud preprocessing step called pillar expansion, where each radar
+point is expanded to a fixed-size pillar, as illustrated in the figure below. Pillars create a better representation for the physical objects detected by the radar, as these detections are now associated with a dimension in the 3D space. Having this new
+representation, we simply consider a radar detection to be
+inside a frustum if all or part of its corresponding pillar is
+inside the frustum, as illustrated in the network architecture figure.</p><figure><img src=./images/pillars.jpg><figcaption><h4>Expanding radar points to 3D pillars (top image). Directly mapping the pillars to the image and replacing with radar depth information results in poor association with objects' center and many overlapping depth values (middle image). Frustum association accurately maps the radar detections to the center of objects and minimizes overlapping (bottom image).</h4></figcaption></figure><p>In the above figure, radar detections are only associated to objects with a valid ground truth or detection box, and only if all or part of the radar detection pillar is inside the box. Frustum association also prevents associating radar detections caused by background objects such as buildings to foreground objects, as seen in the case of pedestrians on the right hand side of the image.</p><h3 id=radar-feature-extraction>Radar Feature Extraction</h3><p>After associating radar detections to their corresponding
+objects, we use the depth and velocity of the radar detections to create complementary features for the image. Particularly, for every radar detection associated to an object,
+we generate three heat map channels centered at and inside
+the object’s 2D bounding box, as shown in the figure above. The
+width and height of the heatmaps are proportional to the
+object&rsquo;s 2D bounding box, and are controlled by a parameter $\alpha$. The heatmap values are the normalized object depth
+$d$ and also the $x$ and $y$ components of the radial velocity
+($v_x$ and $v_y$) in the egocentric coordinate system:</p><p>$$
+\begin{equation*}
+F_{x,y,i}^{j} = \frac{1}{M_i}
+\begin{cases}
+f_i & \hskip{5pt} |x-c_{x}^{j}|\leq \alpha w^j \hspace{5pt} \text{and}
+\hspace{5pt} |y-c_{y}^{i}| \leq \alpha h^j \\
+0 & \hskip{5pt} \text{otherwise}
+\end{cases}
+\end{equation*}
+$$</p><p>where $i \in 1, 2, 3$ is the feature map channel, $M_i$
+is a normalizing factor, $f_i$ is the feature value ($d$, $v_x$ or $v_y$),
+$c^j_x$ and $c^j_y$ are the $x$ and $y$ coordinates of the $j$th object’s center
+point on the image and $w^j$ and $h^j$ are the width and height of the
+$j$th object’s 2D bounding box. If two objects have
+overlapping heatmap areas, the one with a smaller depth
+value dominates, as only the closest object is fully visible in
+the image.</p><p>The generated heat maps are then concatenated to the
+image features as extra channels. These features are used
+as inputs to the secondary regression heads to recalculate
+the object’s depth and rotation, as well as velocity and attributes. The velocity regression head estimates the x and
+y components of the object’s actual velocity in the vehicle
+coordinate system. The attribute regression head estimates
+different attributes for different object classes, such as moving or parked for the Car class and standing or sitting for the
+Pedestrian class. The secondary regression heads consist of
+three convolutional layers with 3$\times$3 kernels followed by
+a 1$\times$1 convolutional layer to generate the desired output.
+The extra convolutional layers compared to the primary regression heads help with
+learning higher level features from
+the radar feature maps. The last step is decoding the regression head results into
+3D bounding boxes. The box decoder
+block uses the estimated depth, velocity, rotation, and attributes from the secondary
+regression heads, and takes the other object properties from the primary heads.</p><h2 id=results>Results</h2><p>We compare our radar and camera fusion network with
+the state-of-the-art camera-based models on the nuScenes
+benchmark, and also a LIDAR based method. Table 1
+shows the results on both test and validation splits of the
+nuScenes dataset.</p><figure><img src=./images/results_quant.png><figcaption><h4>Quantitative results</h4></figcaption></figure><p>The detection results compared to the ground truth in camera-view and birds eye view
+are shown in the figure below:</p><figure><img src=./images/results_qual.png><figcaption><h4>Qualitative results from CenterFusion (row 1 & 2) and CenterNet (row 3 & 4) in camera view and BEV. In the BEV plots, detection boxes are shown in cyan and ground truth boxes in red. The radar point cloud is shown in green. Red and blue arrows on objects show the ground truth and predicted velocity vectors respectively.</h4></figcaption></figure><p>For a more detailed discussion on the results and also the ablation study, see our
+<a href=https://arxiv.org/abs/2011.04841>WACV 2021 conference paper</a>.</p></div><div class="row pl-3 pr-3"><div class="col-md-6 share-buttons"><strong>Share on:</strong>
+<a class="btn btn-sm facebook-btn" href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f" target=_blank><i class="fab fa-facebook"></i></a>
+<a class="btn btn-sm twitter-btn" href="https://twitter.com/share?url=https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f&text=CenterFusion&via=Ramin%27s%20Homepage" target=_blank><i class="fab fa-twitter"></i></a>
+<a class="btn btn-sm reddit-btn" href="https://reddit.com/submit?url=https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f&title=CenterFusion" target=_blank><i class="fab fa-reddit"></i></a>
+<a class="btn btn-sm linkedin-btn" href="https://www.linkedin.com/shareArticle?url=https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f&title=CenterFusion" target=_blank><i class="fab fa-linkedin"></i></a>
+<a class="btn btn-sm whatsapp-btn" href="https://api.whatsapp.com/send?text=CenterFusion https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f" target=_blank><i class="fab fa-whatsapp"></i></a>
+<a class="btn btn-sm email-btn" href="mailto:?subject=CenterFusion&body=https%3a%2f%2fmrnabati.github.io%2fposts%2fprojects%2f06_centerfusion%2f" target=_blank><i class="fas fa-envelope-open-text"></i></a></div><div class="col-md-6 btn-improve-page"><a href=https:/github.com/mrnabati/mrnabati.github.io/edit/main/content/posts/projects/06_centerfusion/index.md title="Improve this page" target=_blank rel=noopener><i class="fas fa-code-branch"></i>
+Improve this page</a></div></div><hr><div class="row next-prev-navigator"><div class="col-md-6 previous-article"><a href=/posts/projects/05_radar_camera_fusion/ title="Radar-Camera Sensor Fusion and Depth Estimation" class="btn btn-outline-info"><div><i class="fas fa-chevron-circle-left"></i> Prev</div><div class=next-prev-text>Radar-Camera Sensor Fusion and Depth Estimation</div></a></div><div class="col-md-6 next-article"><a href=/posts/001_installing_nvme_ssd_jetson_xavier/ title="Installing NVMe SSD on Nvidia Jetson Xavier" class="btn btn-outline-info"><div>Next <i class="fas fa-chevron-circle-right"></i></div><div class=next-prev-text>Installing NVMe SSD on Nvidia Jetson Xavier</div></a></div></div><hr></div></div></div><a id=scroll-to-top class=btn><i class="fas fa-chevron-circle-up"></i></a></section><section class=toc-section id=toc-section><div class=toc-holder><h5 class="text-center pl-3">Table of Contents</h5><hr><div class=toc><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#our-approach>Our Approach</a><ul><li><a href=#center-point-detection>Center Point Detection</a></li><li><a href=#radar-association>Radar Association</a></li><li><a href=#radar-feature-extraction>Radar Feature Extraction</a></li></ul></li><li><a href=#results>Results</a></li></ul></nav></div></div></section></div><footer id=footer class="container-fluid text-center align-content-center footer pb-2"><div class="container pt-5"><div class="row text-left"><div class="col-md-4 col-sm-12"><h5>Navigation</h5><ul><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#about>About</a></li><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#experiences>Experiences</a></li><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#education>Education</a></li><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#projects>Projects</a></li><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#publications>Publications</a></li><li class=nav-item><a class=smooth-scroll href=https://mrnabati.github.io/#recent-posts>Recent Posts</a></li></ul></div><div class="col-md-4 col-sm-12"><h5>Contact me:</h5><ul><li><a href=https://github.com/mrnabati target=_blank rel=noopener><span><i class="fab fa-github"></i></span> <span>mrnabati</span></a></li><li><a href=https://www.linkedin.com/in/ramin-nabati target=_blank rel=noopener><span><i class="fab fa-linkedin"></i></span> <span>Ramin Nabati</span></a></li></ul></div></div></div><hr><div class=container><div class="row text-left"><div class=col-md-4><a id=theme href=https://github.com/hugo-toha/toha target=_blank rel=noopener><img src=/images/theme-logo_hu8376fd15465fef26ffe66b6bcf0ca686_13669_32x0_resize_box_3.png alt="Toha Theme Logo">
+Toha</a></div><div class="col-md-4 text-center">© 2022 Copyright.</div><div class="col-md-4 text-right"><a id=hugo href=https://gohugo.io/ target=_blank rel=noopener>Powered by
+<img src=/images/hugo-logo.svg alt="Hugo Logo" height=18></a></div></div></div></footer><script type=text/javascript src=/js/jquery-3.4.1.min.js></script>
+<script type=text/javascript src=/js/popper.min.js></script>
+<script type=text/javascript src=/js/bootstrap.min.js></script>
+<script type=text/javascript src=/js/navbar.js></script>
+<script type=text/javascript src=/js/plyr.js></script>
+<script type=text/javascript src=/js/main.js></script>
+<script type=text/javascript src=/js/darkreader.js></script>
+<script type=text/javascript src=/js/darkmode-darkreader.js></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js></script>
+<script src=/js/single.js></script>
+<script>hljs.initHighlightingOnLoad()</script><link rel=stylesheet href=/katex/katex.min.css><script type=text/javascript defer src=/katex/katex.min.js></script>
+<script type=text/javascript defer src=/katex/auto-render.min.js onload=renderMathInElement(document.body)>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}]})</script><script src=/js/mermaid-8.14.0.min.js></script>
+<script>mermaid.initialize({startOnLoad:!0})</script></body></html>
